@@ -1,0 +1,74 @@
+---
+title: "IS415 G10 Group Project"
+format:
+  html: 
+    theme: materia
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 2
+---
+
+# Geospatial Analytics Project
+
+Welcome to our geospatial analytics project website. This project focuses on \[Insert country\] and explores \[Insert chosen analytical theme\] using geospatial data and web-based tools.
+
+## Motivation
+
+This project is motivated by \[Insert a brief description of the problem, e.g., "the need to better understand the spatial distribution of drug offenses across Thailand and how law enforcement resources are allocated"\].
+
+## Objectives
+
+-   To apply geospatial analysis techniques to \[Insert objective, e.g., explore spatial point patterns in drug offenses\].
+-   To build a user-friendly web application for data exploration and visualization.
+-   To provide valuable insights for \[Insert stakeholders, e.g., law enforcement agencies, public policy makers\].
+
+## Approach
+
+We use a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:
+
+### Data Sources
+
+-   **\[Primary Dataset\]**: \[Provide a brief description of your main dataset, e.g., Thailand Drug Offenses dataset from Kaggle\].
+-   **Additional Datasets**: \[Mention other relevant datasets, e.g., Thailand’s subnational boundaries from HDX\].
+
+### Tools and Technologies
+
+-   **Web Mapping API**: \[Insert API, e.g., Leaflet.js, Mapbox\]
+-   **Data Visualization**: \[Insert API, e.g., Plotly.js, D3.js\]
+-   **Geospatial Analysis Libraries**: \[Insert libraries, e.g., `sf`, `spdep`\]
+-   **Web Framework**: Quarto, Shiny
+
+## Early Prototypes
+
+We have started with early prototypes of the web application. Below are screenshots of the initial interface and maps.
+
+**Prototype Screenshot**\
+*Insert an image of your prototype here.*
+
+## Expected Outcomes
+
+We expect the project to generate the following outcomes:
+
+-   **Interactive Maps**: Users will be able to explore the spatial distribution of \[insert theme\].
+-   **Statistical Insights**: The application will provide spatial statistical outputs such as \[insert methods, e.g., hot spot analysis, clustering, regression models\].
+-   **Data Filtering**: Users can filter data by date, region, and other key parameters.
+
+## Challenges and Future Work
+
+While we anticipate success, the project presents some challenges, such as data quality and performance optimization for large datasets. Future iterations may include real-time data integration and expanded analysis features.
+
+## Team Members
+
+-   **Xu Haiyang**
+-   **Ming Yan**
+-   **Javier**
+
+## Contact
+
+For any inquiries or feedback, please contact us at:
+
+-   haiyang.xu.2021\@scis.smu.edu.sg
+
+------------------------------------------------------------------------
+
+This `index.qmd` file is a basic structure for your project website's landing page. It includes sections for project overview, objectives, methodology, and early prototypes. You can update it as your project evolves. Let me know if you need further refinements or additions!
