@@ -68,7 +68,3 @@ While we anticipate success, the project presents some challenges, such as data 
 For any inquiries or feedback, please contact us at:
 
 -   haiyang.xu.2021\@scis.smu.edu.sg
-
-------------------------------------------------------------------------
-
-This `index.qmd` file is a basic structure for your project website's landing page. It includes sections for project overview, objectives, methodology, and early prototypes. You can update it as your project evolves. Let me know if you need further refinements or additions!
