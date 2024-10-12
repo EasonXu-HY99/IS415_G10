@@ -1,0 +1,95 @@
+---
+title: "IS415 Geospatial Analytics Project Proposal - Group 10"
+---
+
+### Vietnam Economic development from 2019-2023
+
+### Group Members:
+
+|              |          |
+|--------------|----------|
+| Xu Haiyang   | 01431654 |
+| Javier Lian  | 01414631 |
+| Han Ming Yan | 01414457 |
+
+## Project Summary:
+
+### Motivation:
+
+Our initial motivation stemmed from news about Cambodia's groundbreaking of the China-funded canal project in August 2024, aimed at connecting Phnom Penh to the Gulf of Thailand. While the project has sparked interest, the limited availability of data and the short period since its inception made it difficult to analyse the economic impacts on Cambodia.
+
+Further investigation into the news revealed concerns about the project's environmental impact on neighbouring Vietnam, particularly regarding the Mekong Delta, a critical economic region for Vietnam. This prompted our group to shift focus to Vietnam's economic development over the last five years (2019-2023), aiming to explore how this economic growth has evolved and how future infrastructure projects like the canal might influence the country’s economy.
+
+Vietnam has made significant strides in economic development, transitioning from one of the poorest countries to a middle-income nation. We focus on Vietnam’s development from 2019 to 2023, a crucial period marked by resilience in the face of global challenges such as COVID-19. Understanding how Vietnam navigated these challenges and continued its growth can offer insights for future economic planning, especially as the country aims to achieve high-income status by 2045.
+
+We plan to investigate the overall economic development trends in Vietnam, using the most recent five years as a baseline, and provide insights into how projects like Cambodia’s Funan Canal project may further impact Vietnam.
+
+## **Problems or Issues:**
+
+1.  **Economic Vulnerability to External Projects**: Vietnam's economy, particularly its trade and agriculture sectors, may face challenges from external infrastructure projects like Cambodia’s canal. The canal could divert trade routes, impacting Vietnam's ports and potentially reducing their economic importance.
+
+2.  **Environmental and Agricultural Risks**: The Mekong Delta, a key agricultural region, may face environmental changes due to the canal’s impact on water resources, which could, in turn, affect Vietnam's agricultural output and overall economic stability.
+
+3.  **Economic Disparities Across Regions**: Vietnam has experienced rapid economic growth, but this development has not been evenly distributed. Our analysis aims to explore how different regions have fared during the 2019-2023 period and identify patterns of growth and disparity.
+
+## **Relevant Related Work:**
+
+Previous studies on Vietnam’s economic development have emphasised its rapid industrialization, growing export economy, and integration into global markets through free trade agreements. Research has also highlighted Vietnam's dependence on the Mekong Delta for agriculture, which plays a significant role in the country’s economy and could be impacted by water-related projects like Cambodia’s canal.
+
+In terms of geospatial analysis, prior work has explored the spatial distribution of economic activities across Vietnam, highlighting disparities between urban and rural regions. Additionally, studies on transboundary water resource management between Vietnam and Cambodia underscore the geopolitical and environmental concerns associated with infrastructure projects like the canal.
+
+## **Approach and Methodology:**
+
+### **1. Data Collection:**
+
+We will gather comprehensive datasets to track Vietnam's economic performance from 2019 to 2023. These datasets will include:
+
+-   **Economic Data**: GDP growth, trade, foreign direct investment, and labour market indicators sourced from the **World Bank**, **Asian Development Bank (ADB)**, and **Vietnam’s General Statistics Office (GSO)**.
+
+-   **Environmental Data**: Mekong River water flow data and environmental indicators sourced from the **Mekong River Commission (MRC)** and **Global Forest Watch**.	
+
+### **2. Analytical Themes:**
+
+-   **Spatial Point Patterns Analysis**: This will help us explore how economic activities, such as GDP growth, are distributed across Vietnam’s regions. We will investigate whether there are clusters or specific regions showing significant economic development and whether these regions are positioned to be impacted by external projects like the Cambodian canal.
+
+-   **Exploratory Spatial Data Analysis (ESDA)**: ESDA will allow us to visualise and assess spatial relationships between economic variables, such as trade activity and labour market conditions, across Vietnam’s provinces. This approach will help us identify geographic disparities in economic development.
+
+### **3. Data Processing:**
+
+To ensure consistency across datasets, we will harmonise them using spatial interpolation and transformation techniques. This will involve aligning various data sources to common geographical units, such as Vietnam’s administrative divisions (provinces and districts).
+
+### **4. Early Prototypes/Storyboards:**
+
+-   **Interactive Map**: We have begun developing an interactive map that displays economic indicators, such as GDP growth, across Vietnam's provinces for 2019-2023.
+
+-   **Spatial Analysis**: We have also sketched out visualisations showing the distribution of economic activity and identifying potential regions that might be most affected by the Cambodian canal project in the future.
+
+## **Expected Outcomes:**
+
+-   **Comprehensive Economic Baseline**: We will provide an in-depth analysis of Vietnam’s economic development over the past five years, identifying key regions of growth and disparity.
+
+-   **Impact Prediction**: Using spatial analysis, we aim to predict how projects like Cambodia’s canal could influence Vietnam’s economy, particularly in the Mekong Delta region.
+
+-   **Geospatial Visualisations**: We will develop interactive maps and visualisations that clearly illustrate economic trends across Vietnam, highlighting regions that may be vulnerable to external changes.
+
+## **Challenges and Limitations:**
+
+-   **Data Gaps**: While we expect to collect comprehensive data, there may be gaps or missing neighbour provinces in high-resolution environmental and conflict data for specific regions in Vietnam.
+
+-   **Cross-border Impacts**: Analysing the indirect impact of external projects like Cambodia’s canal on Vietnam’s economy may be difficult due to the limited availability of cross-border economic interaction data.
+
+## Links
+
+GitHub Link: [EasonXu-HY99/IS415_G10: IS415 G10 group project (github.com)](https://github.com/EasonXu-HY99/IS415_G10)
+
+## **References:**
+
+1.  AP News. (2024, August 9). Cambodia breaks ground on a China-funded canal and says it will be built ‘no matter the cost.’ AP News.[ https://apnews.com/article/cambodia-china-vietnam-canal-environment-mekong-c00a0b20702e21d41cf4fc35645c109a](https://apnews.com/article/cambodia-china-vietnam-canal-environment-mekong-c00a0b20702e21d41cf4fc35645c109a)
+
+2.  World Bank. (n.d.). Vietnam economic indicators. World Bank Data Portal.[ https://data.worldbank.org/country/viet-nam](https://data.worldbank.org/country/viet-nam)
+
+3.  Mekong River Commission. (n.d.). Environmental data on the Mekong Delta.[ https://www.mrcmekong.org/](https://www.mrcmekong.org/)
+
+4.  Macrotrends. (n.d.). Vietnam tourism statistics 1995-2023. Macrotrends.[ https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/tourism-statistics](https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/tourism-statistics)
+
+5.  Macrotrends. (n.d.). Vietnam GDP - Gross domestic product 1960-2023. Macrotrends.[ https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/gdp-gross-domestic-product](https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/gdp-gross-domestic-product)

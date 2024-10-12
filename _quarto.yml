@@ -7,8 +7,8 @@ website:
     left: 
       - href: index.qmd
         text: Home
-      - about.qmd
-
+      - href: proposal.qmd
+        text: Project Proposal
 format:
   html:
     theme: cosmo

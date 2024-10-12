@@ -26,9 +26,9 @@ This project is motivated by a recent news report on Cambodia's construction of 
 
 ## Objectives
 
-- To apply geospatial analysis techniques to explore **Spatial Point Patterns** in Vietnam's economic development across provinces.
-- To build a user-friendly web application for data exploration and visualization of economic trends.
-- To provide valuable insights for policymakers, economists, and development agencies on regional economic patterns and disparities.
+-   To apply geospatial analysis techniques to explore **Spatial Point Patterns** in Vietnam's economic development across provinces.
+-   To build a user-friendly web application for data exploration and visualization of economic trends.
+-   To provide valuable insights for policymakers, economists, and development agencies on regional economic patterns and disparities.
 
 ## Approach
 
@@ -36,28 +36,26 @@ We are using a combination of open-source web mapping APIs, data visualization t
 
 ### Data Sources
 
-- **Primary Dataset**: Vietnam economic indicators (GDP, trade, FDI) from the **World Bank** and **Asian Development Bank (ADB)**.
-- **Additional Datasets**: Environmental data from the **Mekong River Commission** and geopolitical data from **ACLED** related to cross-border tensions and economic impacts from Cambodia's canal project.
+-   **Primary Dataset**: Vietnam economic indicators (GDP, trade, FDI) from the **World Bank** and **Asian Development Bank (ADB)**.
+-   **Additional Datasets**: Environmental data from the **Mekong River Commission** and geopolitical data from **ACLED** related to cross-border tensions and economic impacts from Cambodia's canal project.
 
 ### Tools and Technologies
 
-- **Web Mapping API**: Leaflet.js for interactive geospatial mapping.
-- **Data Visualization**: Plotly.js for dynamic data charts and graphs.
-- **Geospatial Analysis Libraries**: `sf` and `spdep` for spatial data wrangling and analysis in R.
-- **Web Framework**: Quarto for generating the project website and Shiny for the interactive web application.
+-   **Web Mapping API**: Leaflet.js for interactive geospatial mapping.
+-   **Data Visualization**: Plotly.js for dynamic data charts and graphs.
+-   **Geospatial Analysis Libraries**: `sf` and `spdep` for spatial data wrangling and analysis in R.
+-   **Web Framework**: Quarto for generating the project website and Shiny for the interactive web application.
 
 ## Expected Outcomes
 
 We expect the project to generate the following outcomes:
 
-- **Interactive Maps**: Users will be able to explore the spatial distribution of economic growth across Vietnam.
-- **Statistical Insights**: The application will provide spatial statistical outputs such as clustering, regression models, and point pattern analysis of economic activity.
-- **Data Filtering**: Users can filter the data by year, region, and economic indicators, allowing for dynamic exploration of Vietnam's economic development over the past five years.
+-   **Interactive Maps**: Users will be able to explore the spatial distribution of economic growth across Vietnam.
+-   **Statistical Insights**: The application will provide spatial statistical outputs such as clustering, regression models, and point pattern analysis of economic activity.
+-   **Data Filtering**: Users can filter the data by year, region, and economic indicators, allowing for dynamic exploration of Vietnam's economic development over the past five years.
 
 ## Challenges and Future Work
 
-While we anticipate success, the project presents some challenges, such as:
-- **Data Quality**: Variations in the resolution of economic and environmental data may affect analysis accuracy.
-- **Performance Optimization**: Handling large datasets in a web application may require performance tuning to ensure smooth user experience.
+While we anticipate success, the project presents some challenges, such as: - **Data Quality**: Variations in the resolution of economic and environmental data may affect analysis accuracy. - **Performance Optimization**: Handling large datasets in a web application may require performance tuning to ensure smooth user experience.
 
 Future iterations may include incorporating real-time data or expanding the analysis to include more complex economic modeling.
