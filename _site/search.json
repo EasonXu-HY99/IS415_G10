@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "Welcome to our geospatial analytics project website. This project focuses on [Insert country] and explores [Insert chosen analytical theme] using geospatial data and web-based tools.\n\n\nThis project is motivated by [Insert a brief description of the problem, e.g., “the need to better understand the spatial distribution of drug offenses across Thailand and how law enforcement resources are allocated”].\n\n\n\n\nTo apply geospatial analysis techniques to [Insert objective, e.g., explore spatial point patterns in drug offenses].\nTo build a user-friendly web application for data exploration and visualization.\nTo provide valuable insights for [Insert stakeholders, e.g., law enforcement agencies, public policy makers].\n\n\n\n\nWe use a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:\n\n\n\n[Primary Dataset]: [Provide a brief description of your main dataset, e.g., Thailand Drug Offenses dataset from Kaggle].\nAdditional Datasets: [Mention other relevant datasets, e.g., Thailand’s subnational boundaries from HDX].\n\n\n\n\n\nWeb Mapping API: [Insert API, e.g., Leaflet.js, Mapbox]\nData Visualization: [Insert API, e.g., Plotly.js, D3.js]\nGeospatial Analysis Libraries: [Insert libraries, e.g., sf, spdep]\nWeb Framework: Quarto, Shiny\n\n\n\n\n\nWe have started with early prototypes of the web application. Below are screenshots of the initial interface and maps.\nPrototype Screenshot\nInsert an image of your prototype here.\n\n\n\nWe expect the project to generate the following outcomes:\n\nInteractive Maps: Users will be able to explore the spatial distribution of [insert theme].\nStatistical Insights: The application will provide spatial statistical outputs such as [insert methods, e.g., hot spot analysis, clustering, regression models].\nData Filtering: Users can filter data by date, region, and other key parameters.\n\n\n\n\nWhile we anticipate success, the project presents some challenges, such as data quality and performance optimization for large datasets. Future iterations may include real-time data integration and expanded analysis features.\n\n\n\n\nXu Haiyang\nMing Yan\nJavier\n\n\n\n\nFor any inquiries or feedback, please contact us at:\n\nhaiyang.xu.2021@scis.smu.edu.sg"
+    "text": "Welcome to our geospatial analytics project website. This project focuses on Vietnam and explores Spatial Point Patterns Analysis and Exploratory Spatial Data Analysis using geospatial data and web-based tools to investigate the country’s economic development from 2019 to 2023.\n\n\nThis project is motivated by a recent news report on Cambodia’s construction of a China-funded canal and the potential economic and environmental impacts on neighboring Vietnam. Initially, we intended to study Cambodia’s economic development surrounding the canal project. However, due to the short timeline and limited data, we decided to shift our focus to Vietnam. Specifically, we are investigating how Vietnam’s economy developed in the past five years (2019-2023) and how infrastructure projects like Cambodia’s canal could influence the country’s economy.\n\n\n\n\nTo apply geospatial analysis techniques to explore Spatial Point Patterns in Vietnam’s economic development across provinces.\nTo build a user-friendly web application for data exploration and visualization of economic trends.\nTo provide valuable insights for policymakers, economists, and development agencies on regional economic patterns and disparities.\n\n\n\n\nWe are using a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:\n\n\n\nPrimary Dataset: Vietnam economic indicators (GDP, trade, FDI) from the World Bank and Asian Development Bank (ADB).\nAdditional Datasets: Environmental data from the Mekong River Commission and geopolitical data from ACLED related to cross-border tensions and economic impacts from Cambodia’s canal project.\n\n\n\n\n\nWeb Mapping API: Leaflet.js for interactive geospatial mapping.\nData Visualization: Plotly.js for dynamic data charts and graphs.\nGeospatial Analysis Libraries: sf and spdep for spatial data wrangling and analysis in R.\nWeb Framework: Quarto for generating the project website and Shiny for the interactive web application.\n\n\n\n\n\nWe expect the project to generate the following outcomes:\n\nInteractive Maps: Users will be able to explore the spatial distribution of economic growth across Vietnam.\nStatistical Insights: The application will provide spatial statistical outputs such as clustering, regression models, and point pattern analysis of economic activity.\nData Filtering: Users can filter the data by year, region, and economic indicators, allowing for dynamic exploration of Vietnam’s economic development over the past five years.\n\n\n\n\nWhile we anticipate success, the project presents some challenges, such as: - Data Quality: Variations in the resolution of economic and environmental data may affect analysis accuracy. - Performance Optimization: Handling large datasets in a web application may require performance tuning to ensure smooth user experience.\nFuture iterations may include incorporating real-time data or expanding the analysis to include more complex economic modeling."
   },
   {
     "objectID": "about.html",
@@ -16,57 +16,57 @@
   {
     "objectID": "index.html#motivation",
     "href": "index.html#motivation",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "This project is motivated by [Insert a brief description of the problem, e.g., “the need to better understand the spatial distribution of drug offenses across Thailand and how law enforcement resources are allocated”]."
+    "text": "This project is motivated by a recent news report on Cambodia’s construction of a China-funded canal and the potential economic and environmental impacts on neighboring Vietnam. Initially, we intended to study Cambodia’s economic development surrounding the canal project. However, due to the short timeline and limited data, we decided to shift our focus to Vietnam. Specifically, we are investigating how Vietnam’s economy developed in the past five years (2019-2023) and how infrastructure projects like Cambodia’s canal could influence the country’s economy."
   },
   {
     "objectID": "index.html#objectives",
     "href": "index.html#objectives",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "To apply geospatial analysis techniques to [Insert objective, e.g., explore spatial point patterns in drug offenses].\nTo build a user-friendly web application for data exploration and visualization.\nTo provide valuable insights for [Insert stakeholders, e.g., law enforcement agencies, public policy makers]."
+    "text": "To apply geospatial analysis techniques to explore Spatial Point Patterns in Vietnam’s economic development across provinces.\nTo build a user-friendly web application for data exploration and visualization of economic trends.\nTo provide valuable insights for policymakers, economists, and development agencies on regional economic patterns and disparities."
   },
   {
     "objectID": "index.html#approach",
     "href": "index.html#approach",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "We use a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:\n\n\n\n[Primary Dataset]: [Provide a brief description of your main dataset, e.g., Thailand Drug Offenses dataset from Kaggle].\nAdditional Datasets: [Mention other relevant datasets, e.g., Thailand’s subnational boundaries from HDX].\n\n\n\n\n\nWeb Mapping API: [Insert API, e.g., Leaflet.js, Mapbox]\nData Visualization: [Insert API, e.g., Plotly.js, D3.js]\nGeospatial Analysis Libraries: [Insert libraries, e.g., sf, spdep]\nWeb Framework: Quarto, Shiny"
+    "text": "We are using a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:\n\n\n\nPrimary Dataset: Vietnam economic indicators (GDP, trade, FDI) from the World Bank and Asian Development Bank (ADB).\nAdditional Datasets: Environmental data from the Mekong River Commission and geopolitical data from ACLED related to cross-border tensions and economic impacts from Cambodia’s canal project.\n\n\n\n\n\nWeb Mapping API: Leaflet.js for interactive geospatial mapping.\nData Visualization: Plotly.js for dynamic data charts and graphs.\nGeospatial Analysis Libraries: sf and spdep for spatial data wrangling and analysis in R.\nWeb Framework: Quarto for generating the project website and Shiny for the interactive web application."
   },
   {
     "objectID": "index.html#early-prototypes",
     "href": "index.html#early-prototypes",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "We have started with early prototypes of the web application. Below are screenshots of the initial interface and maps.\nPrototype Screenshot\nInsert an image of your prototype here."
+    "text": "We have started with early prototypes of the web application. Below are screenshots of the initial interface and maps that display economic growth patterns across different provinces in Vietnam from 2019 to 2023.\nPrototype Screenshot\nInsert an image of your prototype here."
   },
   {
     "objectID": "index.html#expected-outcomes",
     "href": "index.html#expected-outcomes",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "We expect the project to generate the following outcomes:\n\nInteractive Maps: Users will be able to explore the spatial distribution of [insert theme].\nStatistical Insights: The application will provide spatial statistical outputs such as [insert methods, e.g., hot spot analysis, clustering, regression models].\nData Filtering: Users can filter data by date, region, and other key parameters."
+    "text": "We expect the project to generate the following outcomes:\n\nInteractive Maps: Users will be able to explore the spatial distribution of economic growth across Vietnam.\nStatistical Insights: The application will provide spatial statistical outputs such as clustering, regression models, and point pattern analysis of economic activity.\nData Filtering: Users can filter the data by year, region, and economic indicators, allowing for dynamic exploration of Vietnam’s economic development over the past five years."
   },
   {
     "objectID": "index.html#challenges-and-future-work",
     "href": "index.html#challenges-and-future-work",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "While we anticipate success, the project presents some challenges, such as data quality and performance optimization for large datasets. Future iterations may include real-time data integration and expanded analysis features."
+    "text": "While we anticipate success, the project presents some challenges, such as: - Data Quality: Variations in the resolution of economic and environmental data may affect analysis accuracy. - Performance Optimization: Handling large datasets in a web application may require performance tuning to ensure smooth user experience.\nFuture iterations may include incorporating real-time data or expanding the analysis to include more complex economic modeling."
   },
   {
     "objectID": "index.html#team-members",
     "href": "index.html#team-members",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "Xu Haiyang\nMing Yan\nJavier"
+    "text": "Haiyang\nJavier\nMing Yan"
   },
   {
     "objectID": "index.html#contact",
     "href": "index.html#contact",
-    "title": "IS415 G10 Group Project",
+    "title": "Geospatial Analytics Project: Vietnam Economic Development (2019-2023)",
     "section": "",
-    "text": "For any inquiries or feedback, please contact us at:\n\nhaiyang.xu.2021@scis.smu.edu.sg"
+    "text": "For any inquiries or feedback, please contact us at:\nhaiyang.xu.2021@scis.smu.edu.sg"
   }
 ]

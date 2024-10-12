@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Haiyang">
+<meta name="author" content="Ming Yan">
+<meta name="author" content="Javier">
 
-<title>IS415 G10 Group Project – IS415 G10 Group Prject: [Project Title]</title>
+<title>Geospatial Analytics Project: Vietnam Economic Development (2019-2023) – IS415 G10 Group Prject: Vietnam Economic Development from 2019-2023</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">IS415 G10 Group Prject: [Project Title]</span>
+    <span class="navbar-title">IS415 G10 Group Prject: Vietnam Economic Development from 2019-2023</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -117,11 +120,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
   <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives">Objectives</a></li>
   <li><a href="#approach" id="toc-approach" class="nav-link" data-scroll-target="#approach">Approach</a></li>
-  <li><a href="#early-prototypes" id="toc-early-prototypes" class="nav-link" data-scroll-target="#early-prototypes">Early Prototypes</a></li>
   <li><a href="#expected-outcomes" id="toc-expected-outcomes" class="nav-link" data-scroll-target="#expected-outcomes">Expected Outcomes</a></li>
   <li><a href="#challenges-and-future-work" id="toc-challenges-and-future-work" class="nav-link" data-scroll-target="#challenges-and-future-work">Challenges and Future Work</a></li>
-  <li><a href="#team-members" id="toc-team-members" class="nav-link" data-scroll-target="#team-members">Team Members</a></li>
-  <li><a href="#contact" id="toc-contact" class="nav-link" data-scroll-target="#contact">Contact</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -131,14 +131,43 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">IS415 G10 Group Project</h1>
+<h1 class="title">Geospatial Analytics Project: Vietnam Economic Development (2019-2023)</h1>
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Haiyang </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Singapore Management University
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Ming Yan </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Singapore Management University
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Javier </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Singapore Management University
+          </p>
+      </div>
+  </div>
 
 <div class="quarto-title-meta">
 
-    
+      
   
     
   </div>
@@ -150,72 +179,52 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="geospatial-analytics-project" class="level1">
 <h1>Geospatial Analytics Project</h1>
-<p>Welcome to our geospatial analytics project website. This project focuses on [Insert country] and explores [Insert chosen analytical theme] using geospatial data and web-based tools.</p>
+<p>Welcome to our geospatial analytics project website. This project focuses on <strong>Vietnam</strong> and explores <strong>Spatial Point Patterns Analysis</strong> and <strong>Exploratory Spatial Data Analysis</strong> using geospatial data and web-based tools to investigate the country’s economic development from 2019 to 2023.</p>
 <section id="motivation" class="level2">
 <h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
-<p>This project is motivated by [Insert a brief description of the problem, e.g., “the need to better understand the spatial distribution of drug offenses across Thailand and how law enforcement resources are allocated”].</p>
+<p>This project is motivated by a recent news report on Cambodia’s construction of a China-funded canal and the potential economic and environmental impacts on neighboring Vietnam. Initially, we intended to study Cambodia’s economic development surrounding the canal project. However, due to the short timeline and limited data, we decided to shift our focus to Vietnam. Specifically, we are investigating how Vietnam’s economy developed in the past five years (2019-2023) and how infrastructure projects like Cambodia’s canal could influence the country’s economy.</p>
 </section>
 <section id="objectives" class="level2">
 <h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
 <ul>
-<li>To apply geospatial analysis techniques to [Insert objective, e.g., explore spatial point patterns in drug offenses].</li>
-<li>To build a user-friendly web application for data exploration and visualization.</li>
-<li>To provide valuable insights for [Insert stakeholders, e.g., law enforcement agencies, public policy makers].</li>
+<li>To apply geospatial analysis techniques to explore <strong>Spatial Point Patterns</strong> in Vietnam’s economic development across provinces.</li>
+<li>To build a user-friendly web application for data exploration and visualization of economic trends.</li>
+<li>To provide valuable insights for policymakers, economists, and development agencies on regional economic patterns and disparities.</li>
 </ul>
 </section>
 <section id="approach" class="level2">
 <h2 class="anchored" data-anchor-id="approach">Approach</h2>
-<p>We use a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:</p>
+<p>We are using a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:</p>
 <section id="data-sources" class="level3">
 <h3 class="anchored" data-anchor-id="data-sources">Data Sources</h3>
 <ul>
-<li><strong>[Primary Dataset]</strong>: [Provide a brief description of your main dataset, e.g., Thailand Drug Offenses dataset from Kaggle].</li>
-<li><strong>Additional Datasets</strong>: [Mention other relevant datasets, e.g., Thailand’s subnational boundaries from HDX].</li>
+<li><strong>Primary Dataset</strong>: Vietnam economic indicators (GDP, trade, FDI) from the <strong>World Bank</strong> and <strong>Asian Development Bank (ADB)</strong>.</li>
+<li><strong>Additional Datasets</strong>: Environmental data from the <strong>Mekong River Commission</strong> and geopolitical data from <strong>ACLED</strong> related to cross-border tensions and economic impacts from Cambodia’s canal project.</li>
 </ul>
 </section>
 <section id="tools-and-technologies" class="level3">
 <h3 class="anchored" data-anchor-id="tools-and-technologies">Tools and Technologies</h3>
 <ul>
-<li><strong>Web Mapping API</strong>: [Insert API, e.g., Leaflet.js, Mapbox]</li>
-<li><strong>Data Visualization</strong>: [Insert API, e.g., Plotly.js, D3.js]</li>
-<li><strong>Geospatial Analysis Libraries</strong>: [Insert libraries, e.g., <code>sf</code>, <code>spdep</code>]</li>
-<li><strong>Web Framework</strong>: Quarto, Shiny</li>
+<li><strong>Web Mapping API</strong>: Leaflet.js for interactive geospatial mapping.</li>
+<li><strong>Data Visualization</strong>: Plotly.js for dynamic data charts and graphs.</li>
+<li><strong>Geospatial Analysis Libraries</strong>: <code>sf</code> and <code>spdep</code> for spatial data wrangling and analysis in R.</li>
+<li><strong>Web Framework</strong>: Quarto for generating the project website and Shiny for the interactive web application.</li>
 </ul>
 </section>
-</section>
-<section id="early-prototypes" class="level2">
-<h2 class="anchored" data-anchor-id="early-prototypes">Early Prototypes</h2>
-<p>We have started with early prototypes of the web application. Below are screenshots of the initial interface and maps.</p>
-<p><strong>Prototype Screenshot</strong><br>
-<em>Insert an image of your prototype here.</em></p>
 </section>
 <section id="expected-outcomes" class="level2">
 <h2 class="anchored" data-anchor-id="expected-outcomes">Expected Outcomes</h2>
 <p>We expect the project to generate the following outcomes:</p>
 <ul>
-<li><strong>Interactive Maps</strong>: Users will be able to explore the spatial distribution of [insert theme].</li>
-<li><strong>Statistical Insights</strong>: The application will provide spatial statistical outputs such as [insert methods, e.g., hot spot analysis, clustering, regression models].</li>
-<li><strong>Data Filtering</strong>: Users can filter data by date, region, and other key parameters.</li>
+<li><strong>Interactive Maps</strong>: Users will be able to explore the spatial distribution of economic growth across Vietnam.</li>
+<li><strong>Statistical Insights</strong>: The application will provide spatial statistical outputs such as clustering, regression models, and point pattern analysis of economic activity.</li>
+<li><strong>Data Filtering</strong>: Users can filter the data by year, region, and economic indicators, allowing for dynamic exploration of Vietnam’s economic development over the past five years.</li>
 </ul>
 </section>
 <section id="challenges-and-future-work" class="level2">
 <h2 class="anchored" data-anchor-id="challenges-and-future-work">Challenges and Future Work</h2>
-<p>While we anticipate success, the project presents some challenges, such as data quality and performance optimization for large datasets. Future iterations may include real-time data integration and expanded analysis features.</p>
-</section>
-<section id="team-members" class="level2">
-<h2 class="anchored" data-anchor-id="team-members">Team Members</h2>
-<ul>
-<li><strong>Xu Haiyang</strong></li>
-<li><strong>Ming Yan</strong></li>
-<li><strong>Javier</strong></li>
-</ul>
-</section>
-<section id="contact" class="level2">
-<h2 class="anchored" data-anchor-id="contact">Contact</h2>
-<p>For any inquiries or feedback, please contact us at:</p>
-<ul>
-<li>haiyang.xu.2021@scis.smu.edu.sg</li>
-</ul>
+<p>While we anticipate success, the project presents some challenges, such as: - <strong>Data Quality</strong>: Variations in the resolution of economic and environmental data may affect analysis accuracy. - <strong>Performance Optimization</strong>: Handling large datasets in a web application may require performance tuning to ensure smooth user experience.</p>
+<p>Future iterations may include incorporating real-time data or expanding the analysis to include more complex economic modeling.</p>
 
 
 </section>
