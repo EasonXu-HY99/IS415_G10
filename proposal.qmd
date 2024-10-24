@@ -14,7 +14,7 @@ title: "IS415 Geospatial Analytics Project Proposal - Group 10"
 
 ## **Project Summary:**
 
-Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing three main datasets: "Number of farms by kinds of economic activity and by province," "Number of newly established enterprises by province," and "Index of Industrial production by province." By incorporating geospatial data, we aim to explore spatial patterns in economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.
+Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing three main datasets: "Number of farms by kinds of economic activity and by province," "Number of newly established enterprises by province," and "Index of Industrial production by province." By incorporating geospatial data, we aim to explore the economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.
 
 ### **Motivation:**
 
