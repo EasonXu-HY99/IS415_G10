@@ -2,7 +2,7 @@
 title: "IS415 Geospatial Analytics Project Proposal - Group 10"
 ---
 
-### Vietnam Economic development from 2019-2023
+### Vietnam Economic development from 2012-2023
 
 ### Group Members:
 
@@ -12,71 +12,79 @@ title: "IS415 Geospatial Analytics Project Proposal - Group 10"
 | Javier Lian  | 01414631 |
 | Han Ming Yan | 01414457 |
 
-## Project Summary:
+## **Project Summary:**
 
-### Motivation:
+Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing three main datasets: "Number of farms by kinds of economic activity and by province," "Number of newly established enterprises by province," and "Index of Industrial production by province." By incorporating geospatial data, we aim to explore spatial patterns in economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.
 
-Our initial motivation stemmed from news about Cambodia's groundbreaking of the China-funded canal project in August 2024, aimed at connecting Phnom Penh to the Gulf of Thailand. While the project has sparked interest, the limited availability of data and the short period since its inception made it difficult to analyse the economic impacts on Cambodia.
+### **Motivation:**
 
-Further investigation into the news revealed concerns about the project's environmental impact on neighbouring Vietnam, particularly regarding the Mekong Delta, a critical economic region for Vietnam. This prompted our group to shift focus to Vietnam's economic development over the last five years (2019-2023), aiming to explore how this economic growth has evolved and how future infrastructure projects like the canal might influence the country’s economy.
+Vietnam’s rapid economic growth in recent years has positioned it as a key player in the ASEAN region. As a member of ASEAN, Vietnam shares strong economic ties with countries like Singapore, which is one of its largest trading partners. Understanding Vietnam’s economic development, particularly in terms of agriculture, industry, and enterprise growth at the provincial level, is crucial for assessing the country’s future trajectory within the regional economic landscape.
 
-Vietnam has made significant strides in economic development, transitioning from one of the poorest countries to a middle-income nation. We focus on Vietnam’s development from 2019 to 2023, a crucial period marked by resilience in the face of global challenges such as COVID-19. Understanding how Vietnam navigated these challenges and continued its growth can offer insights for future economic planning, especially as the country aims to achieve high-income status by 2045.
+This analysis can offer valuable insights into how Vietnam’s internal economic dynamics may influence and interact with broader ASEAN trade and investment patterns. By identifying regional disparities and growth trends, we can contribute to better policymaking and investment decisions not only for Vietnam but also for ASEAN partners seeking opportunities in Vietnam’s developing markets. This type of analysis becomes especially important as Vietnam strives for greater integration into the global economy while balancing its role within ASEAN.
 
-We plan to investigate the overall economic development trends in Vietnam, using the most recent five years as a baseline, and provide insights into how projects like Cambodia’s Funan Canal project may further impact Vietnam.
+### **Problems or Issues:**
 
-## **Problems or Issues:**
+1.  **Regional Economic Disparities:** Despite Vietnam’s overall economic growth, there are notable disparities between provinces, especially between more industrialized urban areas and agricultural rural regions. Understanding the spatial distribution of growth and inequality across the country will help identify regions that may be lagging behind and in need of policy attention.
 
-1.  **Economic Vulnerability to External Projects**: Vietnam's economy, particularly its trade and agriculture sectors, may face challenges from external infrastructure projects like Cambodia’s canal. The canal could divert trade routes, impacting Vietnam's ports and potentially reducing their economic importance.
+2.  **Balancing Agricultural and Industrial Development:** Vietnam’s economy has historically relied heavily on agriculture, but recent industrialization efforts have shifted the focus toward manufacturing and services. This shift may affect rural provinces that still depend on agriculture. Our analysis will explore how different provinces are transitioning between these sectors and how this shift might impact the future of both agriculture and industry.
 
-2.  **Environmental and Agricultural Risks**: The Mekong Delta, a key agricultural region, may face environmental changes due to the canal’s impact on water resources, which could, in turn, affect Vietnam's agricultural output and overall economic stability.
+3.  **Inter-Regional Economic Dependencies within ASEAN:** Vietnam’s economic development is closely tied to its relationships with other ASEAN countries like Singapore. As trade and investment flows increase within ASEAN, understanding how Vietnam’s internal economic structure supports or hinders these relationships is crucial. Regional economic dependencies and potential bottlenecks must be addressed for sustained growth in both Vietnam and ASEAN.
 
-3.  **Economic Disparities Across Regions**: Vietnam has experienced rapid economic growth, but this development has not been evenly distributed. Our analysis aims to explore how different regions have fared during the 2019-2023 period and identify patterns of growth and disparity.
+### **Relevant Related Work:**
 
-## **Relevant Related Work:**
+Previous research has documented Vietnam’s transformation into an industrialized and export-driven economy, driven by integration into global supply chains and trade agreements. Studies have highlighted how the country’s shift toward manufacturing has fostered urbanization and economic growth, particularly in the north and south, where major cities like Hanoi and Ho Chi Minh City serve as economic hubs.
 
-Previous studies on Vietnam’s economic development have emphasised its rapid industrialization, growing export economy, and integration into global markets through free trade agreements. Research has also highlighted Vietnam's dependence on the Mekong Delta for agriculture, which plays a significant role in the country’s economy and could be impacted by water-related projects like Cambodia’s canal.
+In the context of agriculture, the Mekong Delta continues to be a vital contributor to Vietnam’s economic stability, particularly for rice and fisheries exports. However, concerns over environmental sustainability and the impact of economic diversification on agricultural regions have been raised, suggesting a need for balanced development across sectors.
 
-In terms of geospatial analysis, prior work has explored the spatial distribution of economic activities across Vietnam, highlighting disparities between urban and rural regions. Additionally, studies on transboundary water resource management between Vietnam and Cambodia underscore the geopolitical and environmental concerns associated with infrastructure projects like the canal.
+Geospatial analysis of economic activities across Vietnam has revealed a growing divide between urban and rural regions, with provinces close to economic hubs experiencing faster development than peripheral areas. Additionally, regional studies within ASEAN have emphasized the importance of cross-border economic interactions, particularly between Vietnam and Singapore, in shaping both countries’ long-term growth trajectories.
 
-## **Approach and Methodology:**
+### **Approach and Methodology:**
 
-### **1. Data Collection:**
+1.  **Data Collection:** We will use the following datasets:
 
-We will gather comprehensive datasets to track Vietnam's economic performance from 2019 to 2023. These datasets will include:
+    -   "Number of farms by kinds of economic activity and by province" dataset (2012-2023), sourced from the **General Statistics Office** ([GSO](https://www.gso.gov.vn/en/homepage/)).
 
--   **Economic Data**: GDP growth, trade, foreign direct investment, and labour market indicators sourced from the **World Bank**, **Asian Development Bank (ADB)**, and **Vietnam’s General Statistics Office (GSO)**.
+    -   "Number of newly established enterprises by province" dataset, sourced from GSO.
 
--   **Environmental Data**: Mekong River water flow data and environmental indicators sourced from the **Mekong River Commission (MRC)** and **Global Forest Watch**.	
+    -   "Index of Industrial production by province" dataset, sourced from GSO.
 
-### **2. Analytical Themes:**
+    -   Vietnam’s provincial geospatial boundaries dataset, sourced from **Open Development Mekong** ([dataset link](https://data.opendevelopmentmekong.net/dataset/a-phn-tnh)).
 
--   **Spatial Point Patterns Analysis**: This will help us explore how economic activities, such as GDP growth, are distributed across Vietnam’s regions. We will investigate whether there are clusters or specific regions showing significant economic development and whether these regions are positioned to be impacted by external projects like the Cambodian canal.
+2.  **Analytical Themes:**
 
--   **Exploratory Spatial Data Analysis (ESDA)**: ESDA will allow us to visualise and assess spatial relationships between economic variables, such as trade activity and labour market conditions, across Vietnam’s provinces. This approach will help us identify geographic disparities in economic development.
+    -   **Analytical Regionalisation and Geographical Segmentation:** We will apply clustering techniques to segment Vietnam’s provinces into distinct economic regions based on the number of farms, industrial output, and newly established enterprises. This will allow us to classify regions with similar economic characteristics and highlight provincial-level economic disparities.
 
-### **3. Data Processing:**
+    -   **Geographically Weighted Regression (GWR):** GWR will be used to assess how relationships between different economic indicators (e.g., farm numbers, industrial production) and overall economic performance vary across provinces. This method will account for spatial heterogeneity, enabling us to see how the impact of variables like agriculture or industry differs regionally.
 
-To ensure consistency across datasets, we will harmonise them using spatial interpolation and transformation techniques. This will involve aligning various data sources to common geographical units, such as Vietnam’s administrative divisions (provinces and districts).
+3.  **Data Processing:**
 
-### **4. Early Prototypes/Storyboards:**
+    -   We will harmonize all datasets by ensuring they are aligned with provincial boundaries and time periods.
 
--   **Interactive Map**: We have begun developing an interactive map that displays economic indicators, such as GDP growth, across Vietnam's provinces for 2019-2023.
+    -   Standardizing and normalizing economic indicators to account for differences in provincial population sizes or geographic areas.
 
--   **Spatial Analysis**: We have also sketched out visualisations showing the distribution of economic activity and identifying potential regions that might be most affected by the Cambodian canal project in the future.
+    -   Applying clustering algorithms (such as K-means) for regionalisation and performing GWR to model regional variation in economic outcomes.
 
-## **Expected Outcomes:**
+4.  **Geospatial Analysis:**
 
--   **Comprehensive Economic Baseline**: We will provide an in-depth analysis of Vietnam’s economic development over the past five years, identifying key regions of growth and disparity.
+    -   Mapping and visualizing regions based on the segmentation to identify clusters of provinces with similar economic profiles.
 
--   **Impact Prediction**: Using spatial analysis, we aim to predict how projects like Cambodia’s canal could influence Vietnam’s economy, particularly in the Mekong Delta region.
+    -   Using GWR to visualize spatially varying relationships between economic indicators and their impacts across Vietnam’s provinces.
 
--   **Geospatial Visualisations**: We will develop interactive maps and visualisations that clearly illustrate economic trends across Vietnam, highlighting regions that may be vulnerable to external changes.
+### **Expected Outcomes:**
 
-## **Challenges and Limitations:**
+1.  **Regional Economic Segmentation:** We will provide a clear classification of Vietnam’s provinces into distinct economic regions, based on their performance in agriculture, industrial output, and enterprise development. This will highlight regions that share similar economic profiles and identify which provinces are leading or lagging behind.
 
--   **Data Gaps**: While we expect to collect comprehensive data, there may be gaps or missing neighbour provinces in high-resolution environmental and conflict data for specific regions in Vietnam.
+2.  **Insights into Spatial Economic Variation:** Through the GWR analysis, we will offer detailed insights into how the relationships between economic activities (e.g., number of farms, industrial production) and overall economic performance differ across provinces. This will shed light on how agricultural or industrial strengths influence growth differently in various parts of the country.
 
--   **Cross-border Impacts**: Analysing the indirect impact of external projects like Cambodia’s canal on Vietnam’s economy may be difficult due to the limited availability of cross-border economic interaction data.
+3.  **Actionable Recommendations:** Based on the segmentation and regression results, we can offer recommendations for policymakers and investors on regions that require further development or where specific economic sectors should be strengthened to promote balanced growth.
+
+### **Challenges and Limitations:**
+
+1.  **Data Consistency and Quality:** The datasets may not cover all provinces equally across all years, which could result in incomplete or biased analyses. Harmonizing data from multiple years and ensuring alignment across provinces could be challenging.
+
+2.  **Spatial Scale Limitations:** Since the analysis is at the provincial level, the insights derived from regional segmentation or GWR may not capture finer-scale intra-provincial disparities, particularly in large provinces with significant internal variation.
+
+3.  **Model Sensitivity:** Geographically Weighted Regression models can be sensitive to bandwidth selection and may produce unstable results in regions with sparse data. This could impact the reliability of the results in provinces with lower economic activity or incomplete data records.
 
 ## Links
 
@@ -84,12 +92,6 @@ GitHub Link: [EasonXu-HY99/IS415_G10: IS415 G10 group project (github.com)](http
 
 ## **References:**
 
-1.  AP News. (2024, August 9). Cambodia breaks ground on a China-funded canal and says it will be built ‘no matter the cost.’ AP News.[ https://apnews.com/article/cambodia-china-vietnam-canal-environment-mekong-c00a0b20702e21d41cf4fc35645c109a](https://apnews.com/article/cambodia-china-vietnam-canal-environment-mekong-c00a0b20702e21d41cf4fc35645c109a)
+-   General Statistics Office of Vietnam. (n.d.). Statistical data on farms, enterprises, and industrial production. General Statistics Office of Vietnam. Retrieved from <https://www.gso.gov.vn/en/homepage/>
 
-2.  World Bank. (n.d.). Vietnam economic indicators. World Bank Data Portal.[ https://data.worldbank.org/country/viet-nam](https://data.worldbank.org/country/viet-nam)
-
-3.  Mekong River Commission. (n.d.). Environmental data on the Mekong Delta.[ https://www.mrcmekong.org/](https://www.mrcmekong.org/)
-
-4.  Macrotrends. (n.d.). Vietnam tourism statistics 1995-2023. Macrotrends.[ https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/tourism-statistics](https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/tourism-statistics)
-
-5.  Macrotrends. (n.d.). Vietnam GDP - Gross domestic product 1960-2023. Macrotrends.[ https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/gdp-gross-domestic-product](https://www.macrotrends.net/global-metrics/countries/vnm/vietnam/gdp-gross-domestic-product)
+-   Open Development Mekong. (n.d.). Vietnam provincial boundaries dataset. Open Development Mekong. Retrieved from <https://data.opendevelopmentmekong.net/dataset/a-phn-tnh>
