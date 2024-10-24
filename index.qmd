@@ -16,46 +16,56 @@ format:
 editor: visual
 ---
 
-# Geospatial Analytics Project
+# **Geospatial Analytics Project**
 
-Welcome to our geospatial analytics project website. This project focuses on **Vietnam** and explores **Spatial Point Patterns Analysis** and **Exploratory Spatial Data Analysis** using geospatial data and web-based tools to investigate the country's economic development from 2019 to 2023.
+Welcome to our geospatial analytics project website. This project focuses on Vietnam and applies **Analytical Regionalisation**, **Geographical Segmentation**, and **Geographically Weighted Regression Models** (GWR) to investigate the country’s economic development from 2012 to 2023 using geospatial data and web-based tools.
 
-## Motivation
+### **Motivation**
 
-This project is motivated by a recent news report on Cambodia's construction of a China-funded canal and the potential economic and environmental impacts on neighboring Vietnam. Initially, we intended to study Cambodia's economic development surrounding the canal project. However, due to the short timeline and limited data, we decided to shift our focus to Vietnam. Specifically, we are investigating how Vietnam's economy developed in the past five years (2019-2023) and how infrastructure projects like Cambodia's canal could influence the country's economy.
+Our project is motivated by Vietnam's remarkable economic growth within the ASEAN region, particularly its strong ties with countries like Singapore, which serve as major trading partners. Understanding the spatial dynamics of Vietnam’s economic development over the past decade is crucial for assessing regional disparities, planning future investments, and promoting balanced growth. Our analysis will provide valuable insights into how provinces differ in their agricultural, industrial, and enterprise performance, contributing to a deeper understanding of Vietnam's regional economic structure.
 
-## Objectives
+### **Objectives**
 
--   To apply geospatial analysis techniques to explore **Spatial Point Patterns** in Vietnam's economic development across provinces.
--   To build a user-friendly web application for data exploration and visualization of economic trends.
--   To provide valuable insights for policymakers, economists, and development agencies on regional economic patterns and disparities.
+-   To apply **Analytical Regionalisation** and **Geographically Weighted Regression Models** to explore economic development trends across Vietnam’s provinces.
 
-## Approach
+-   To build an interactive web application that facilitates data exploration and visualisation of provincial economic trends.
 
-We are using a combination of open-source web mapping APIs, data visualization tools, and geospatial analysis libraries to achieve our objectives. Here is an overview of the approach we are taking:
+-   To provide actionable insights for policymakers, economists, and investors on regional economic growth and disparities in Vietnam.
 
-### Data Sources
+### **Approach**
 
--   **Primary Dataset**: Vietnam economic indicators (GDP, trade, FDI) from the **World Bank** and **Asian Development Bank (ADB)**.
--   **Additional Datasets**: Environmental data from the **Mekong River Commission** and geopolitical data from **ACLED** related to cross-border tensions and economic impacts from Cambodia's canal project.
+Our approach involves leveraging open-source geospatial tools and datasets to analyse Vietnam's economic development. Here's an overview of the steps we are taking:
 
-### Tools and Technologies
+#### **Data Sources**
+
+-   **Primary Dataset**: Economic data from the **General Statistics Office** ([GSO](https://www.gso.gov.vn/en/homepage/)), including the "Number of farms by kinds of economic activity and by province," "Number of newly established enterprises by province," and "Index of Industrial production by province."
+
+-   **Geospatial Dataset**: Vietnam’s provincial boundaries sourced from **Open Development Mekong** ([dataset link](https://data.opendevelopmentmekong.net/dataset/a-phn-tnh)).
+
+#### **Tools and Technologies**
 
 -   **Web Mapping API**: Leaflet.js for interactive geospatial mapping.
+
 -   **Data Visualization**: Plotly.js for dynamic data charts and graphs.
+
 -   **Geospatial Analysis Libraries**: `sf` and `spdep` for spatial data wrangling and analysis in R.
+
 -   **Web Framework**: Quarto for generating the project website and Shiny for the interactive web application.
 
-## Expected Outcomes
+### **Expected Outcomes**
 
-We expect the project to generate the following outcomes:
+-   **Regional Economic Segmentation**: We will generate maps and analyses that classify Vietnam’s provinces into distinct economic regions based on their performance in agriculture, industry, and enterprise development.
 
--   **Interactive Maps**: Users will be able to explore the spatial distribution of economic growth across Vietnam.
--   **Statistical Insights**: The application will provide spatial statistical outputs such as clustering, regression models, and point pattern analysis of economic activity.
--   **Data Filtering**: Users can filter the data by year, region, and economic indicators, allowing for dynamic exploration of Vietnam's economic development over the past five years.
+-   **Spatial Insights via GWR**: Our models will reveal how economic variables influence development differently across provinces, providing insight into regional economic variation.
 
-## Challenges and Future Work
+-   **Interactive Data Exploration**: Users can filter by year, region, and economic indicators, allowing for dynamic exploration of Vietnam's economic growth from 2012 to 2023.
 
-While we anticipate success, the project presents some challenges, such as: - **Data Quality**: Variations in the resolution of economic and environmental data may affect analysis accuracy. - **Performance Optimization**: Handling large datasets in a web application may require performance tuning to ensure smooth user experience.
+### **Challenges and Future Work**
 
-Future iterations may include incorporating real-time data or expanding the analysis to include more complex economic modeling.
+While we expect to achieve meaningful results, several challenges include:
+
+-   **Data Consistency**: Variability in data quality and coverage across provinces may affect the robustness of our segmentation and regression models.
+
+-   **Scalability**: Processing and displaying large geospatial datasets in an interactive web application could present performance challenges that require optimization.
+
+In the future, we aim to expand the analysis by incorporating additional economic and environmental datasets and exploring more advanced geospatial methods such as flow and movement data analytics.
