@@ -1,12 +1,13 @@
 /* css styles */
 /* Body Styling */
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4; /* Light background */
-    color: #333; /* Dark text for readability */
+    background-image: url('background.jpg');  /* Assuming background.jpg is in the same folder */
+    background-size: cover;  /* Ensures the image covers the entire background */
+    background-position: center;  /* Centers the image */
+    background-repeat: no-repeat;  /* Prevents the image from repeating */
+    background-attachment: fixed;  /* Ensures the background stays in place when scrolling */
+    font-family: 'Arial', sans-serif; /* Ensure the font styling is retained */
+    color: #333; /* Text color for readability */
 }
 
 /* Container for centering content */
