@@ -126,14 +126,8 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul class="collapse">
-  <li><a href="#geospatial-analytics-project" id="toc-geospatial-analytics-project" class="nav-link active" data-scroll-target="#geospatial-analytics-project"><strong>Geospatial Analytics Project</strong></a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -186,60 +180,29 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="geospatial-analytics-project" class="level1">
-<h1><strong>Geospatial Analytics Project</strong></h1>
-<p>Welcome to our geospatial analytics project website. This project focuses on Vietnam and applies <strong>Analytical Regionalisation</strong>, <strong>Geographical Segmentation</strong>, and <strong>Geographically Weighted Regression Models</strong> (GWR) to investigate the country’s economic development from 2012 to 2023 using geospatial data and web-based tools.</p>
-<section id="motivation" class="level3">
-<h3 class="anchored" data-anchor-id="motivation"><strong>Motivation</strong></h3>
-<p>Our project is motivated by Vietnam’s remarkable economic growth within the ASEAN region, particularly its strong ties with countries like Singapore, which serve as major trading partners. Understanding the spatial dynamics of Vietnam’s economic development over the past decade is crucial for assessing regional disparities, planning future investments, and promoting balanced growth. Our analysis will provide valuable insights into how provinces differ in their agricultural, industrial, and enterprise performance, contributing to a deeper understanding of Vietnam’s regional economic structure.</p>
-</section>
-<section id="objectives" class="level3">
-<h3 class="anchored" data-anchor-id="objectives"><strong>Objectives</strong></h3>
+<section id="mapping-vietnams-economic-pulse-a-geospatial-exploration-of-growth-hotspots-2012-2023" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-vietnams-economic-pulse-a-geospatial-exploration-of-growth-hotspots-2012-2023"><strong>Mapping Vietnam’s Economic Pulse: A Geospatial Exploration of Growth Hotspots (2012-2023)</strong></h3>
+<p>By Group G10:</p>
 <ul>
-<li><p>To apply <strong>Analytical Regionalisation</strong> and <strong>Geographically Weighted Regression Models</strong> to explore economic development trends across Vietnam’s provinces.</p></li>
-<li><p>To build an interactive web application that facilitates data exploration and visualisation of provincial economic trends.</p></li>
-<li><p>To provide actionable insights for policymakers, economists, and investors on regional economic growth and disparities in Vietnam.</p></li>
+<li><p>Haiyang, Singapore Management University</p></li>
+<li><p>Ming Yan, Singapore Management University</p></li>
+<li><p>Javier, Singapore Management University</p></li>
 </ul>
+<p>This project is part of Singapore Management University’s IS415 Geospatial Analytics &amp; Applications 2023, under the guidance of Professor Kam Tin Seong.</p>
+<p>The aim of our project is to create an interactive web application that allows users to explore Vietnam’s economic development across provinces from 2012 to 2023. By using techniques such as <strong>Analytical Regionalisation</strong> and <strong>Geographically Weighted Regression</strong>, we provide valuable insights into the country’s economic growth patterns, regional disparities, and economic hotspots — all without the need for users to write a single line of code.</p>
 </section>
-<section id="approach" class="level3">
-<h3 class="anchored" data-anchor-id="approach"><strong>Approach</strong></h3>
-<p>Our approach involves leveraging open-source geospatial tools and datasets to analyse Vietnam’s economic development. Here’s an overview of the steps we are taking:</p>
-<section id="data-sources" class="level4">
-<h4 class="anchored" data-anchor-id="data-sources"><strong>Data Sources</strong></h4>
+<section id="important-links" class="level3">
+<h3 class="anchored" data-anchor-id="important-links"><strong>Important Links</strong></h3>
 <ul>
-<li><p><strong>Primary Dataset</strong>: Economic data from the <strong>General Statistics Office</strong> (<a href="https://www.gso.gov.vn/en/homepage/">GSO</a>), including the “Number of farms by kinds of economic activity and by province,” “Number of newly established enterprises by province,” and “Index of Industrial production by province.”</p></li>
-<li><p><strong>Geospatial Dataset</strong>: Vietnam’s provincial boundaries sourced from <strong>Open Development Mekong</strong> (<a href="https://data.opendevelopmentmekong.net/dataset/a-phn-tnh">dataset link</a>).</p></li>
+<li><a href="overview.html"><strong>Project Overview</strong></a></li>
+<li><a href="proposal.html"><strong>Project Proposal</strong></a></li>
+<li><a href="https://haiyangeason.shinyapps.io/Shiny/"><strong>Shiny Application</strong></a></li>
+<li><a href="guide.html"><strong>User Guide</strong></a></li>
+<li><a href="poster.html"><strong>Project Poster</strong></a></li>
+<li><a href="Research Paper.pdf"><strong>Research Paper</strong></a></li>
 </ul>
-</section>
-<section id="tools-and-technologies" class="level4">
-<h4 class="anchored" data-anchor-id="tools-and-technologies"><strong>Tools and Technologies</strong></h4>
-<ul>
-<li><p><strong>Web Mapping API</strong>: Leaflet.js for interactive geospatial mapping.</p></li>
-<li><p><strong>Data Visualization</strong>: Plotly.js for dynamic data charts and graphs.</p></li>
-<li><p><strong>Geospatial Analysis Libraries</strong>: <code>sf</code> and <code>spdep</code> for spatial data wrangling and analysis in R.</p></li>
-<li><p><strong>Web Framework</strong>: Quarto for generating the project website and Shiny for the interactive web application.</p></li>
-</ul>
-</section>
-</section>
-<section id="expected-outcomes" class="level3">
-<h3 class="anchored" data-anchor-id="expected-outcomes"><strong>Expected Outcomes</strong></h3>
-<ul>
-<li><p><strong>Regional Economic Segmentation</strong>: We will generate maps and analyses that classify Vietnam’s provinces into distinct economic regions based on their performance in agriculture, industry, and enterprise development.</p></li>
-<li><p><strong>Spatial Insights via GWR</strong>: Our models will reveal how economic variables influence development differently across provinces, providing insight into regional economic variation.</p></li>
-<li><p><strong>Interactive Data Exploration</strong>: Users can filter by year, region, and economic indicators, allowing for dynamic exploration of Vietnam’s economic growth from 2012 to 2023.</p></li>
-</ul>
-</section>
-<section id="challenges-and-future-work" class="level3">
-<h3 class="anchored" data-anchor-id="challenges-and-future-work"><strong>Challenges and Future Work</strong></h3>
-<p>While we expect to achieve meaningful results, several challenges include:</p>
-<ul>
-<li><p><strong>Data Consistency</strong>: Variability in data quality and coverage across provinces may affect the robustness of our segmentation and regression models.</p></li>
-<li><p><strong>Scalability</strong>: Processing and displaying large geospatial datasets in an interactive web application could present performance challenges that require optimization.</p></li>
-</ul>
-<p>In the future, we aim to expand the analysis by incorporating additional economic and environmental datasets and exploring more advanced geospatial methods such as flow and movement data analytics.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
