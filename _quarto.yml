@@ -7,8 +7,16 @@ website:
     left: 
       - href: index.qmd
         text: Home
+      - href: overview.qmd
+        text: Project Overview
       - href: proposal.qmd
         text: Project Proposal
+      - href: guide.qmd
+        text: User Guide
+      - href: poster.qmd
+        text: Poster
+      - href: Research Paper.pdf
+        text: Research Paper
 format:
   html:
     theme: cosmo
