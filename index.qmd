@@ -37,4 +37,4 @@ The aim of our project is to create an interactive web application that allows u
 -   [**Shiny Application**](https://haiyangeason.shinyapps.io/Shiny/)
 -   [**User Guide**](guide.html)
 -   [**Project Poster**](poster.html)
--   [**Research Paper**](Research Paper.pdf)
+-   [**Research Paper**](Research%20Paper.pdf)
