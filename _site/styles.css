@@ -1,4 +1,10 @@
-/* css styles */
+/* Color Palette
+#091057 - Dark Blue
+#024CAA - Medium Blue
+#EC8305 - Orange
+#DBD3D3 - Light Gray
+*/
+
 /* Body Styling */
 body {
     background-image: url('background.jpg');  /* Assuming background.jpg is in the same folder */
@@ -7,7 +13,7 @@ body {
     background-repeat: no-repeat;  /* Prevents the image from repeating */
     background-attachment: fixed;  /* Ensures the background stays in place when scrolling */
     font-family: 'Arial', sans-serif; /* Ensure the font styling is retained */
-    color: #333; /* Text color for readability */
+    color: #091057; /* Dark Blue for text readability */
 }
 
 /* Container for centering content */
@@ -19,7 +25,7 @@ body {
 
 /* Title Styling */
 .title {
-    color: #2c3e50; /* Darker heading color */
+    color: #091057; /* Dark Blue for title */
     text-align: center;
     margin-bottom: 20px;
     font-size: 3em; /* Adjust this as needed for the title size */
@@ -29,25 +35,55 @@ body {
 
 /* Link Styling */
 a {
-    color: #3498db; /* Blue links */
+    color: #024CAA; /* Medium Blue for default links */
     text-decoration: none;
 }
 
 a:hover {
-    color: #2980b9; /* Darker blue on hover */
-    text-decoration: underline;
+    color: #EC8305; /* Orange for links on hover */
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #091057;  /* Dark Blue for navbar background */
+    overflow: hidden;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: white;  /* Default white color for links */
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/* Navbar Hover and Active */
+.navbar a:hover {
+    color: #EC8305;  /* Orange text on hover */
+}
+
+/* Active Link Styling */
+.navbar a:active, .navbar a.current {
+    color: #EC8305;  /* Orange text for active/current link */
+}
+
+/* Optional: Adding focus to indicate the active page in the navbar */
+.navbar a.current {
+    border-bottom: 2px solid #EC8305;  /* Optional underline effect */
 }
 
 /* Heading Styles */
 h1, h2, h3 {
-    color: #2c3e50; /* Darker heading color */
+    color: #091057; /* Dark Blue for headings */
     text-align: center;
     margin-bottom: 20px;
 }
 
 /* Button Styling */
 button, .btn {
-    background-color: #3498db;
+    background-color: #EC8305; /* Orange for buttons */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -56,28 +92,7 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-    background-color: #2980b9;
-}
-
-/* Navigation Bar */
-.navbar {
-    background-color: #2c3e50;
-    overflow: hidden;
-}
-
-.navbar a {
-    float: left;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-.navbar a:hover {
-    background-color: #2980b9;
-    color: white;
+    background-color: #024CAA; /* Medium Blue on hover */
 }
 
 /* Import Google Font */
@@ -87,7 +102,7 @@ button:hover, .btn:hover {
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
-    color: #333;
+    color: #091057;
 }
 
 p {
@@ -108,7 +123,7 @@ h2 {
 
 /* Link Cards */
 .card {
-    background-color: #fff;
+    background-color: #DBD3D3; /* Light Gray for card background */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 20px;
@@ -122,7 +137,7 @@ h2 {
 
 /* Centered text */
 .card a {
-    color: #3498db;
+    color: #024CAA; /* Medium Blue for card links */
     font-weight: bold;
     text-align: center;
     display: block;
@@ -130,12 +145,12 @@ h2 {
 }
 
 .card a:hover {
-    color: #2980b9;
+    color: #091057; /* Dark Blue on hover */
 }
 
 /* Footer Styling */
 footer {
-    background-color: #2c3e50;
+    background-color: #091057; /* Dark Blue for footer */
     color: white;
     text-align: center;
     padding: 20px;
@@ -146,12 +161,12 @@ footer {
 }
 
 footer a {
-    color: #ecf0f1;
+    color: #DBD3D3; /* Light Gray for footer links */
     text-decoration: none;
 }
 
 footer a:hover {
-    color: #3498db;
+    color: #EC8305; /* Orange on hover */
 }
 
 /* Mobile Responsiveness */
