@@ -1,0 +1,43 @@
+---
+title: "Uncovering Vietnam’s Economic Pulse: A Geospatial Exploration of Growth Hotspots (2012-2023)"
+author: "Your Name"
+date: "2023"
+output: html_document
+---
+
+# **Overview**
+
+This project focuses on analyzing Vietnam’s economic development from 2012 to 2023 at the provincial level. We will explore economic patterns using datasets on farms, enterprises, and industrial production to identify regional growth disparities and provide insights for policymakers and investors.
+
+# Import Packages
+
+```{r}
+# Load necessary packages for geospatial and statistical analysis
+pacman::p_load(olsrr, corrplot, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary)
+```
+
+# Import Data
+
+```{r}
+# Load the economic data from CSV file
+farms_data <- read_csv("data/aspatial/farms.csv", skip = 1)
+
+# Reference geospatial data (shapefile)
+vietnam_provinces <- st_read(dsn = "data/geospatial/DiaphanTinh", layer = "Dia_phan_Tinh")
+```
+
+# Data Preparation and Cleaning
+
+```{r}
+# Clean and organize the farms data for analysis
+farms_data <- farms_data %>%
+  filter(!is.na(`Cities, provincies`)) %>%
+  rename(province = `Cities, provincies`)
+
+# Reshape the data to long format if necessary for time series analysis
+farms_long <- farms_data %>%
+  pivot_longer(cols = starts_with("20"), names_to = "year_type", values_to = "count")
+
+```
+
+Exploratory Data Analysis (EDA)
