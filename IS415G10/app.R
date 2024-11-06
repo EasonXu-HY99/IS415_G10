@@ -40,7 +40,7 @@ ui <- navbarPage(
                    selectInput("graph_format", "Format of Graph", choices = c("Histogram", "Density"))
                  ),
                  
-                 sliderInput("k_value", "K Value for Dendrogram", min = 2, max = 10, value = 6, step = 1),
+                 sliderInput("k_value", "K Value", min = 2, max = 10, value = 6, step = 1),
                  
                  conditionalPanel(
                    condition = "input.segmentation_tab == 'ClustGeo'",
@@ -78,18 +78,18 @@ ui <- navbarPage(
                             plotOutput("agglo_gap_plot"),
                             
                             h4("Cluster Dendrogram with User-Defined Number of Clusters"),
-                            p("The dendrogram shows the hierarchical clustering of the data based on the chosen 'Year'. Use the 'K Value for Dendrogram' to select the number of clusters to display in the dendrogram."),
+                            p("The dendrogram shows the hierarchical clustering of the data based on the chosen 'Year'. Use the 'K Value' to select the number of clusters to display in the dendrogram."),
                             plotOutput("dendrogram_plot"),
                             
                             h4("Clustered Map of Regions Based on Selected Year and Cluster Count"),
-                            p("This map displays the spatial distribution of regions grouped into clusters based on hierarchical clustering. Adjust the 'K Value for Dendrogram' slider to change the number of clusters displayed on the map, which dynamically updates according to the clustering analysis."),
+                            p("This map displays the spatial distribution of regions grouped into clusters based on hierarchical clustering. Adjust the 'K Value' slider to change the number of clusters displayed on the map, which dynamically updates according to the clustering analysis."),
                             plotOutput("clustered_map")
                    ),
                    
                    # SKATER Tab
                    tabPanel("SKATER",
                             h4("Choropleth Map of SKATER Spatial Clusters"),
-                            p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value for Dendrogram' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
+                            p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value m' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
                             plotOutput("skater_choropleth_map"),
                             
                             h4("Comparison of Hierarchical and SKATER Cluster Maps"),
@@ -100,11 +100,11 @@ ui <- navbarPage(
                    # ClustGeo Tab
                    tabPanel("ClustGeo",
                             h4("Ward-like Hierarchical Clustering with ClustGeo"),
-                            p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value for Dendrogram' to explore different cluster groupings."),
+                            p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value ' to explore different cluster groupings."),
                             plotOutput("clustgeo_dendrogram"),
                             
                             h4("Mapping the Clusters Formed by ClustGeo"),
-                            p("This map visualizes the spatial distribution of clusters formed by the ClustGeo hierarchical clustering method. The 'K Value for Dendrogram' slider determines the number of clusters displayed."),
+                            p("This map visualizes the spatial distribution of clusters formed by the ClustGeo hierarchical clustering method. The 'K Value ' slider determines the number of clusters displayed."),
                             plotOutput("clustgeo_map"),
                             
                             h4("Spatially Constrained Hierarchical Clustering"),
