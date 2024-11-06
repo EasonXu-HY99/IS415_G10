@@ -1,223 +1,650 @@
-pacman::p_load(shiny, sf, tmap, bslib, tidyverse,
-               sfdep, shinydashboard, shinythemes)
+# Load required packages and data
+pacman::p_load(shiny, sf, tmap, bslib, tidyverse, sfdep, shinydashboard, shinythemes,
+               spdep, ClustGeo, ggpubr, cluster, factoextra, NbClust, heatmaply, 
+               corrplot, psych, GGally)
 
-vietnam <- st_read(dsn = "data/geospatial/DiaphanTinh", 
-                 layer = "Dia_phan_Tinh")
-farms <- read_csv("data/aspatial/farms.csv")
+# Load data
+vietnam_geo <- readRDS("data/rds/vietnam_geo.rds")
+farms <- readRDS("data/rds/farms.rds")
+enterprise <- readRDS("data/rds/enterprise.rds")
+vietnam_farm <- readRDS("data/rds/vietnam_farm.rds")
+vietnam_farm <- st_as_sf(vietnam_farm)
 
 #========================#
 ###### Shiny UI ######
 #========================#  
 
 ui <- navbarPage(
-  title = "GLSA Application",
-  fluid = TRUE, #shiny dashboard
-  theme = shinytheme("flatly"), #different themes
+  title = "VietEcoMap",
+  fluid = TRUE,
+  theme = shinytheme("flatly"),
   id = "navbarID",
   
-  tabPanel("GeoVisualisation",
-           sidebarLayout(
-             sidebarPanel(
-               selectInput(inputId = "variable",
-                           label = "Mapping variable",
-                           choices = list("Gross Domestic Product, GDP" = "GDP",
-                                          "Gross Domestic Product Per Capita" = "GDPPC",
-                                          "Gross Industry Output" = "GIO",
-                                          "Output Value of Agriculture" = "OVA",
-                                          "Output Value of Service" = "OVS"),
-                           selected = "GDPPC"),
-               selectInput(inputId = "classification",
-                           label = "Classification method:",
-                           choices = list("sd" = "sd", 
-                                          "equal" = "equal", 
-                                          "pretty" = "pretty", 
-                                          "quantile" = "quantile", 
-                                          "kmeans" = "kmeans", 
-                                          "hclust" = "hclust", 
-                                          "bclust" = "bclust", 
-                                          "fisher" = "fisher", 
-                                          "jenks" = "jenks"),
-                           selected = "pretty"),
-               sliderInput(inputId = "classes",
-                           label = "Number of classes",
-                           min = 5,
-                           max = 10,
-                           value = 6),
-               selectInput(inputId = "colour",
-                           label = "Colour scheme:",
-                           choices = list("blues" = "Blues", 
-                                          "reds" = "Reds", 
-                                          "greens" = "Greens",
-                                          "Yellow-Orange-Red" = "YlOrRd",
-                                          "Yellow-Orange-Brown" = "YlOrBr",
-                                          "Yellow-Green" = "YlGn",
-                                          "Orange-Red" = "OrRd"),
-                           selected = "YlOrRd"),
-               sliderInput(inputId = "opacity",
-                           label = "Level of transparency",
-                           min = 0,
-                           max = 1,
-                           value = 0.5)
-             ),
-             mainPanel(
-               tmapOutput("mapPlot", width = "100%", height = 580)
+  # Segmentation tab with multiple sub-tabs
+  tabPanel("Segmentation",
+           fluidRow(
+             sidebarLayout(
+               sidebarPanel(
+                 style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);", 
+                 
+                 conditionalPanel(
+                   condition = "input.segmentation_tab == 'Correlation' || input.segmentation_tab == 'Visuals'",
+                   selectInput("type_of_farm", "Type of Farm", choices = c("Cultivation", "Livestock", "Fishing", "Others"))
+                 ),
+                 
+                 # Common Inputs for both Segmentation and SKATER
+                 sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
+                 
+                 conditionalPanel(
+                   condition = "input.segmentation_tab == 'Correlation'",
+                   selectInput("graph_format", "Format of Graph", choices = c("Histogram", "Density"))
+                 ),
+                 
+                 sliderInput("k_value", "K Value for Dendrogram", min = 2, max = 10, value = 6, step = 1),
+                 
+                 conditionalPanel(
+                   condition = "input.segmentation_tab == 'ClustGeo'",
+                   sliderInput("alpha", "Alpha (Spatial Constraint)", min = 0.0, max = 1.0, value = 0.2, step = 0.1)
+                 )
+               ),
+               
+               mainPanel(
+                 style = "margin-left:30%;",  # Adjust main panel position relative to the fixed sidebar width
+                 
+                 # Tabset with an ID to track the active sub-tab within Segmentation
+                 tabsetPanel(
+                   id = "segmentation_tab",  # ID to track the sub-tab
+                   
+                   # Correlation Tab
+                   tabPanel("Correlation",
+                            h4("Correlation Analysis of Farm Types for the Selected Year"),
+                            p("This correlation analysis provides insights into the relationship between different types of farm output in the selected year. Adjust the variable 'Year' to observe how the correlations change over time. The correlation matrix displays the correlation coefficients, where values close to 1 or -1 indicate strong relationships."),
+                            plotOutput("correlation_plot"),
+                            
+                            h4("Standardized Clustering Analysis for the Selected Year and Farm Type"),
+                            p("This section shows the distributions of the selected farm type data across different standardization methods (raw values, Min-Max, and Z-score) for the chosen year. Adjust 'Year' and 'Type of Farm' to explore how the data varies under each standardization method."),
+                            plotOutput("standardized_clustering"),
+                            
+                            h4("Agglomerative Coefficient Values"),
+                            fluidRow(
+                              valueBoxOutput("ac_average", width = 3),
+                              valueBoxOutput("ac_single", width = 3),
+                              valueBoxOutput("ac_complete", width = 3),
+                              valueBoxOutput("ac_ward", width = 3)
+                            ),
+                            
+                            h4("Agglomerative Coefficient and Gap Statistic for Clustering"),
+                            p("The agglomerative coefficient and gap statistic help evaluate clustering solutions. Adjust the 'Year' to update the clustering analysis."),
+                            plotOutput("agglo_gap_plot"),
+                            
+                            h4("Cluster Dendrogram with User-Defined Number of Clusters"),
+                            p("The dendrogram shows the hierarchical clustering of the data based on the chosen 'Year'. Use the 'K Value for Dendrogram' to select the number of clusters to display in the dendrogram."),
+                            plotOutput("dendrogram_plot"),
+                            
+                            h4("Clustered Map of Regions Based on Selected Year and Cluster Count"),
+                            p("This map displays the spatial distribution of regions grouped into clusters based on hierarchical clustering. Adjust the 'K Value for Dendrogram' slider to change the number of clusters displayed on the map, which dynamically updates according to the clustering analysis."),
+                            plotOutput("clustered_map")
+                   ),
+                   
+                   # SKATER Tab
+                   tabPanel("SKATER",
+                            h4("Choropleth Map of SKATER Spatial Clusters"),
+                            p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value for Dendrogram' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
+                            plotOutput("skater_choropleth_map"),
+                            
+                            h4("Comparison of Hierarchical and SKATER Cluster Maps"),
+                            p("The comparison below shows the spatial distribution of clusters generated by two methods: hierarchical clustering and the SKATER method. Use this visualization to assess differences in clustering patterns across methods for the selected year and cluster count."),
+                            plotOutput("comparison_map")
+                   ),
+                   
+                   # ClustGeo Tab
+                   tabPanel("ClustGeo",
+                            h4("Ward-like Hierarchical Clustering with ClustGeo"),
+                            p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value for Dendrogram' to explore different cluster groupings."),
+                            plotOutput("clustgeo_dendrogram"),
+                            
+                            h4("Mapping the Clusters Formed by ClustGeo"),
+                            p("This map visualizes the spatial distribution of clusters formed by the ClustGeo hierarchical clustering method. The 'K Value for Dendrogram' slider determines the number of clusters displayed."),
+                            plotOutput("clustgeo_map"),
+                            
+                            h4("Spatially Constrained Hierarchical Clustering"),
+                            p("This plot shows the impact of different alpha values on clustering with spatial constraints."),
+                            plotOutput("choicealpha_plot"),
+                            
+                            h4("Mapping Clusters Formed by Spatially Constrained ClustGeo"),
+                            p("This map shows the clusters formed with spatial constraints. Use the 'Alpha' slider to adjust the spatial constraint level."),
+                            plotOutput("spatially_constrained_map")
+                   ),
+                   
+                   # Visuals Tab
+                   tabPanel("Visuals",
+                            h4("Visual Interpretation of Clusters"),
+                            p("This boxplot shows the distribution of the selected farm type within each cluster. Adjust 'Year', 'K Value', and 'Type of Farm' to observe changes in clustering and distribution."),
+                            plotOutput("cluster_boxplot"),
+                            
+                            h4("Parallel Coordinates Plot for ICT Variables by Cluster"),
+                            p("The parallel coordinates plot displays multiple ICT variables across clusters for the selected year. Adjust 'Year' and 'K Value' to examine changes in clustering patterns."),
+                            plotOutput("parallel_coordinates_plot")
+                   )
+                 )
+               )
              )
            )
-  ),
-  
-  navbarMenu("Global Measures",
-             tabPanel("Moran's I"),
-             tabPanel("Geary's c"),
-             tabPanel("Getis-Ord Global G")
-  ),
-  
-  navbarMenu("Local Measures",
-             tabPanel("Local Moran",
-                      sidebarLayout(
-                        sidebarPanel(
-                          selectInput(inputId = "variable",
-                                      label = "Mapping variable",
-                                      choices = list("Gross Domestic Product, GDP" = "GDP",
-                                                     "Gross Domestic Product Per Capita" = "GDPPC",
-                                                     "Gross Industry Output" = "GIO",
-                                                     "Output Value of Agriculture" = "OVA",
-                                                     "Output Value of Service" = "OVS"),
-                                      selected = "GDPPC"),
-                          radioButtons(inputId = "Contiguity1",
-                                       label = "Contiguity Method",
-                                       choices = c("Queen" = TRUE, "Rook" = FALSE),
-                                       selected = TRUE,
-                                       inline = TRUE),
-                          selectInput("MoranWeights", "Spatial Weights Style",
-                                      choices = c("W: Row standardised" = "W",
-                                                  "B: Binary" = "B",
-                                                  "C: Globally standardised" = "C",
-                                                  "U: C / no of neighbours" = "U",
-                                                  "minmax" = "minmax",
-                                                  "S: Variance" = "S"),
-                                      selected = "W"),
-                          sliderInput(inputId = "MoranSims", 
-                                      label = "Number of Simulations:", 
-                                      min = 99, max = 499,
-                                      value = 99, step = 100),
-                          actionButton("MoranUpdate", "Update Plot"),
-                          hr(),
-                          radioButtons(inputId = "MoranConf",
-                                       label = "Select Confidence level",
-                                       choices = c("0.95" = 0.05, "0.99" = 0.01),
-                                       selected = 0.05,
-                                       inline = TRUE),
-                          selectInput("LisaClass", "Select Lisa Classification",
-                                      choices = c("mean" = "mean",
-                                                  "median" = "median",
-                                                  "pysal" = "pysal"),
-                                      selected = "mean"),
-                          selectInput("localmoranstats", "Select Local Moran's Stat:",
-                                      choices = c("local moran(ii)" = "local moran(ii)",
-                                                  "expectation(eii)" = "expectation(eii)",
-                                                  "variance(var_ii)" = "variance(var_ii)",
-                                                  "std deviation(z_ii)" = "std deviation(z_ii)",
-                                                  "P-value" = "p_value"),
-                                      selected = "local moran(ii)")
-                        ),
-                        mainPanel(
-                          fluidRow(
-                            column(6, tmapOutput("LocalMoranMap")),
-                            column(6, tmapOutput("LISA"))
-                          )
-                        )
-                      )
-             ),
-             tabPanel("Local Gi")
-  ),
-  
-  navbarMenu("Emerging Hot Spot Analysis")
+  )
 )
+
+
 
 #========================#
 ###### Shiny Server ######
-#========================# 
+#========================#  
 
-server <- function(input, output){
+server <- function(input, output) {
   
-  # Map rendering
-  output$mapPlot <- renderTmap({
-    tmap_options(check.and.fix = TRUE) +
-      tm_shape(vietnam)+
-      tm_fill(input$variable,
-              n = input$classes,
-              style = input$classification,
-              palette = input$colour,
-              alpha = input$opacity) +
-      tm_borders(lwd = 0.1, alpha = 1) +
-      tm_view(set.zoom.limits = c(6.5, 8))
+  # Correlation Analysis
+  output$correlation_plot <- renderPlot({
+    # Dynamically select columns based on the chosen year
+    selected_year <- input$year
+    farm_data <- vietnam_farm %>%
+      st_drop_geometry() %>%  
+      select_at(vars(matches(paste0(selected_year, " (Cultivation|Livestock|Fishing|Others) PR")))) %>%
+      mutate(across(everything(), as.numeric))  
+    
+    # Rename columns by removing the year prefix
+    colnames(farm_data) <- gsub(paste0(selected_year, " "), "", colnames(farm_data))  
+    
+    # Calculate correlation matrix
+    cluster_vars_cor_pr <- cor(farm_data, use = "complete.obs")
+    
+    # Plot correlation matrix
+    corrplot.mixed(cluster_vars_cor_pr,
+                   lower = "ellipse", 
+                   upper = "number",
+                   tl.pos = "lt",
+                   diag = "l",
+                   tl.col = "black")
+    
   })
   
-  #==========================================================
-  # Local Measures of Spatial Autocorrelation
-  #==========================================================   
-  
-  localMIResults <- eventReactive(input$MoranUpdate, {
+  # Standardized Clustering Analysis
+  output$standardized_clustering <- renderPlot({
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    selected_format <- input$graph_format  # Get the selected format
     
-    if(nrow(vietnam) == 0) return(NULL)  # Exit if no data
+    # Construct the column name based on the selected year and farm type
+    column_name <- paste0(selected_year, " ", selected_farm_type, " PR")
     
-    # Computing Contiguity Spatial Weights
-    wm_q <- vietnam %>%
-      mutate(nb = st_contiguity(geometry, queen = !!input$Contiguity1), 
-             wt = st_weights(nb, style = input$MoranWeights))
+    # Prepare data for the selected column
+    farm_data <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(all_of(column_name)) %>%
+      mutate(across(everything(), as.numeric))
     
-    # Computing Local Moran's I
-    lisa <- wm_q %>%
-      mutate(local_moran = local_moran(
-        vietnam[[input$variable]], nb, wt, nsim = as.numeric(input$MoranSims)), .before = 5) %>%
-      unnest(local_moran)
-    
-    lisa <- lisa %>%
-      rename("local moran(ii)" = "ii", "expectation(eii)" = "eii",
-             "variance(var_ii)" = "var_ii", "std deviation(z_ii)" = "z_ii",
-             "p_value" = "p_ii")
-    
-    return(lisa)       
-  })
-  
-  # Render local Moran I statistics
-  output$LocalMoranMap <- renderTmap({
-    df <- localMIResults()
-    
-    if(is.null(df) || nrow(df) == 0) return()  # Exit if no data
-    
-    # Map creation using tmap
-    localMI_map <- tm_shape(df) +
-      tm_fill(col = input$localmoranstats, 
-              style = "pretty", 
-              palette = "RdBu", 
-              title = input$localmoranstats) +
-      tm_borders() +
-      tm_view(set.zoom.limits = c(6, 7))
-    
-    localMI_map 
-  })
-  
-  # Render LISA map 
-  output$LISA <- renderTmap({
-    df <- localMIResults()
-    if(is.null(df)) return()
-    
-    lisa_sig <- df  %>%
-      filter(p_value < as.numeric(input$MoranConf))  
-    
-    lisamap <- tm_shape(df) +
-      tm_polygons() +
-      tm_borders() +
+    # Conditionally generate plots based on selected format
+    if (selected_format == "Histogram") {
+      # Raw values plot
+      r <- ggplot(farm_data, aes(x = .data[[column_name]])) +
+        geom_histogram(bins = 20, color = "black", fill = "light blue") +
+        ggtitle("Raw Values (without Standardization)")
       
-      tm_shape(lisa_sig) +
-      tm_fill(col = input$LisaClass,  
-              palette = "-RdBu",  
-              title = (paste("Significance:", input$LisaClass))) +
-      tm_borders(alpha = 0.4) +
-      tm_view(set.zoom.limits = c(6, 7))
+      # Min-Max Standardization
+      vietnam_farm_std_df <- as.data.frame(scale(farm_data, center = FALSE, 
+                                                 scale = apply(farm_data, 2, max) - apply(farm_data, 2, min)))
+      s <- ggplot(vietnam_farm_std_df, aes(x = .data[[column_name]])) +
+        geom_histogram(bins = 20, color = "black", fill = "light blue") +
+        ggtitle("Min-Max Standardization")
+      
+      # Z-score Standardization
+      vietnam_farm_z_df <- as.data.frame(scale(farm_data))
+      z <- ggplot(vietnam_farm_z_df, aes(x = .data[[column_name]])) +
+        geom_histogram(bins = 20, color = "black", fill = "light blue") +
+        ggtitle("Z-score Standardization")
+      
+    } else {
+      # Density plots
+      r <- ggplot(farm_data, aes(x = .data[[column_name]])) +
+        geom_density(color = "black", fill = "light blue") +
+        ggtitle("Raw Values (without Standardization)")
+      
+      # Min-Max Standardization
+      vietnam_farm_std_df <- as.data.frame(scale(farm_data, center = FALSE, 
+                                                 scale = apply(farm_data, 2, max) - apply(farm_data, 2, min)))
+      s <- ggplot(vietnam_farm_std_df, aes(x = .data[[column_name]])) +
+        geom_density(color = "black", fill = "light blue") +
+        ggtitle("Min-Max Standardization")
+      
+      # Z-score Standardization
+      vietnam_farm_z_df <- as.data.frame(scale(farm_data))
+      z <- ggplot(vietnam_farm_z_df, aes(x = .data[[column_name]])) +
+        geom_density(color = "black", fill = "light blue") +
+        ggtitle("Z-score Standardization")
+    }
     
-    lisamap 
+    # Arrange plots side by side
+    ggarrange(r, s, z, ncol = 3, nrow = 1)
+  })
+  
+  # Agglomerative Coefficient Values
+  ac_values <- reactive({
+    selected_year <- input$year
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))")))
+    
+    m <- c("average", "single", "complete", "ward")
+    names(m) <- c("average", "single", "complete", "ward")
+    
+    ac <- function(x) {
+      agnes(vietnam_farm_ict, method = x)$ac 
+    }
+    
+    map_dbl(m, ac)  # Returns named vector with values for average, single, complete, ward
+  })
+  
+  # Display each agglomerative coefficient in a separate valueBox
+  output$ac_average <- renderValueBox({
+    valueBox(
+      format(ac_values()["average"], digits = 4),
+      subtitle = "Average",
+      color = "blue"
+    )
+  })
+  
+  output$ac_single <- renderValueBox({
+    valueBox(
+      format(ac_values()["single"], digits = 4),
+      subtitle = "Single",
+      color = "blue"
+    )
+  })
+  
+  output$ac_complete <- renderValueBox({
+    valueBox(
+      format(ac_values()["complete"], digits = 4),
+      subtitle = "Complete",
+      color = "blue"
+    )
+  })
+  
+  output$ac_ward <- renderValueBox({
+    valueBox(
+      format(ac_values()["ward"], digits = 4),
+      subtitle = "Ward",
+      color = "blue"
+    )
+  })
+  
+  # Agglomerative Coefficient and Gap Statistic Plot
+  output$agglo_gap_plot <- renderPlot({
+    selected_year <- input$year
+    
+    # Select columns based on the selected year
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))")))
+    
+    set.seed(12345)
+    gap_stat <- clusGap(vietnam_farm_ict, 
+                        FUN = hcut,      
+                        nstart = 25,     
+                        K.max = 10, 
+                        B = 50)          
+    
+    # Plot gap statistic
+    fviz_gap_stat(gap_stat)
+  })
+  
+  #Dendrogram
+  output$dendrogram_plot <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value  # Use selected k value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric)
+    
+    # Calculate distance matrix and hierarchical clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    hclust_ward <- hclust(proxmat, method = 'ward.D')
+    
+    # Plot dendrogram with k clusters
+    plot(hclust_ward, labels = vietnam_farm$`Cities, provincies`, cex = 0.9)
+    rect.hclust(hclust_ward, k = k, border = 2:5)
+  })
+  
+  output$clustered_map <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value  # Use selected k value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrix and hierarchical clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    hclust_ward <- hclust(proxmat, method = 'ward.D')
+    
+    # Create clusters and bind them to the spatial data
+    groups <- as.factor(cutree(hclust_ward, k = k))
+    vietnam_farm_cluster <- cbind(vietnam_farm, as.matrix(groups)) %>%
+      rename(`CLUSTER` = `as.matrix.groups.`)
+    
+    # Plot the clustered map
+    qtm(vietnam_farm_cluster, "CLUSTER")
+  })
+  
+  # SKATER Choropleth Map
+  output$skater_choropleth_map <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value  # Use selected k value
+    ncuts <- k - 1  # Calculate ncuts as k - 1
+    
+    # Prepare spatial and numerical data for SKATER
+    vietnam_farm_sp <- as_Spatial(vietnam_farm)
+    
+    # Neighborhood and cost list
+    vietnam_farm.nb <- poly2nb(vietnam_farm_sp)
+    coords <- st_coordinates(st_centroid(st_geometry(vietnam_farm)))
+    
+    # Select columns for the selected year and ensure only numeric values
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()
+    
+    # Ensure data consistency
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)
+    }
+    
+    # Create cost list and minimum spanning tree
+    lcosts <- nbcosts(vietnam_farm.nb, vietnam_farm_ict)
+    vietnam_farm.w <- nb2listw(vietnam_farm.nb, lcosts, style = "B")
+    vietnam_farm.mst <- mstree(vietnam_farm.w)
+    
+    # Apply SKATER clustering
+    clust <- spdep::skater(edges = vietnam_farm.mst[, 1:2], 
+                           data = vietnam_farm_ict, 
+                           method = "euclidean", 
+                           ncuts = ncuts)
+    
+    # Bind SKATER groups to spatial data and rename column
+    groups_mat <- as.matrix(clust$groups)
+    vietnam_farm_spatialcluster <- cbind(vietnam_farm, as.factor(groups_mat)) %>%
+      rename(`SP_CLUSTER` = `as.factor.groups_mat.`)
+    
+    # Plot SKATER clustered map
+    qtm(vietnam_farm_spatialcluster, "SP_CLUSTER")
+  })
+  
+  # Comparison Map: Hierarchical vs SKATER Clustering
+  output$comparison_map <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value  # Use selected k value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrix and hierarchical clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    hclust_ward <- hclust(proxmat, method = 'ward.D')
+    
+    # Create hierarchical clusters and bind them to the spatial data
+    groups <- as.factor(cutree(hclust_ward, k = k))
+    vietnam_farm_cluster <- cbind(vietnam_farm, as.matrix(groups)) %>%
+      rename(`CLUSTER` = `as.matrix.groups.`)
+    
+    # SKATER Clustering
+    vietnam_farm_sp <- as_Spatial(vietnam_farm)
+    vietnam_farm.nb <- poly2nb(vietnam_farm_sp)
+    lcosts <- nbcosts(vietnam_farm.nb, vietnam_farm_ict)
+    vietnam_farm.w <- nb2listw(vietnam_farm.nb, lcosts, style = "B")
+    vietnam_farm.mst <- mstree(vietnam_farm.w)
+    
+    clust <- spdep::skater(edges = vietnam_farm.mst[, 1:2], 
+                           data = vietnam_farm_ict, 
+                           method = "euclidean", 
+                           ncuts = k - 1)
+    
+    # Bind SKATER groups to spatial data and rename column
+    groups_mat <- as.matrix(clust$groups)
+    vietnam_farm_spatialcluster <- cbind(vietnam_farm, as.factor(groups_mat)) %>%
+      rename(`SP_CLUSTER` = `as.factor.groups_mat.`)
+    
+    # Maps for comparison
+    hclust.map <- qtm(vietnam_farm_cluster, "CLUSTER") + tm_borders(alpha = 0.5)
+    skater.map <- qtm(vietnam_farm_spatialcluster, "SP_CLUSTER") + tm_borders(alpha = 0.5)
+    
+    # Arrange maps side-by-side
+    tmap_arrange(hclust.map, skater.map, asp = NA, ncol = 2)
+  })
+  
+  output$clustgeo_dendrogram <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value  # Use selected k value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrix for clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    
+    # Perform Ward-like hierarchical clustering with ClustGeo
+    nongeo_cluster <- hclustgeo(proxmat)
+    
+    # Plot dendrogram with selected number of clusters
+    plot(nongeo_cluster, labels = vietnam_farm$`Cities, provincies`, cex = 0.9)
+    rect.hclust(nongeo_cluster, k = k, border = 2:5)
+  })
+  
+  output$clustgeo_map <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value  # Use selected k value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrix for clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    
+    # Perform Ward-like hierarchical clustering with ClustGeo
+    nongeo_cluster <- hclustgeo(proxmat)
+    
+    # Create clusters and bind them to the spatial data
+    groups <- as.factor(cutree(nongeo_cluster, k = k))
+    vietnam_farm_ngeo_cluster <- cbind(vietnam_farm, as.matrix(groups)) %>%
+      rename(`CLUSTER` = `as.matrix.groups.`)
+    
+    # Plot the clustered map
+    qtm(vietnam_farm_ngeo_cluster, "CLUSTER")
+  })
+  
+  output$choicealpha_plot <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrices
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    dist <- st_distance(vietnam_farm, vietnam_farm)
+    distmat <- as.dist(dist)
+    
+    # Perform choicealpha analysis to explore spatial constraints
+    cr <- choicealpha(proxmat, distmat, range.alpha = seq(0, 1, 0.1), K = k, graph = TRUE)
+  })
+  
+  output$spatially_constrained_map <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value
+    alpha <- input$alpha  # Use the selected alpha value
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrices
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    dist <- st_distance(vietnam_farm, vietnam_farm)
+    distmat <- as.dist(dist)
+    
+    # Perform spatially constrained hierarchical clustering with the selected alpha value
+    clustG <- hclustgeo(proxmat, distmat, alpha = alpha)
+    groups <- as.factor(cutree(clustG, k = k))
+    
+    # Bind clusters to spatial data and map
+    vietnam_farm_Gcluster <- cbind(vietnam_farm, as.matrix(groups)) %>%
+      rename(`CLUSTER` = `as.matrix.groups.`)
+    
+    qtm(vietnam_farm_Gcluster, "CLUSTER")
+  })
+  
+  output$cluster_boxplot <- renderPlot({
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    k <- input$k_value
+    
+    # Select columns based on the selected year and keep only relevant columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      showNotification("No numeric columns available for clustering", type = "error")
+      return(NULL)
+    }
+    
+    # Calculate distance matrix and perform hierarchical clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    nongeo_cluster <- hclustgeo(proxmat)
+    groups <- as.factor(cutree(nongeo_cluster, k = k))
+    
+    # Add cluster information to the dataset
+    vietnam_farm_ngeo_cluster <- cbind(vietnam_farm, as.matrix(groups)) %>%
+      rename(`CLUSTER` = `as.matrix.groups.`)
+    
+    # Construct the exact column name for the selected type and year
+    y_column <- paste0("X", selected_year, ".", selected_farm_type, ".PR")
+    
+    # Check if the column exists in the dataset
+    if (!y_column %in% colnames(vietnam_farm_ngeo_cluster)) {
+      showNotification("Selected column does not exist in the dataset", type = "error")
+      return(NULL)
+    }
+    
+    # Create boxplot using the dynamically selected column
+    ggplot(data = vietnam_farm_ngeo_cluster, aes(x = CLUSTER, y = .data[[y_column]])) +
+      geom_boxplot() +
+      labs(title = paste("Boxplot of", selected_farm_type, "by Cluster"),
+           x = "Cluster", 
+           y = paste(selected_farm_type, "for", selected_year))
+  })
+  
+  output$parallel_coordinates_plot <- renderPlot({
+    selected_year <- input$year
+    k <- input$k_value
+    
+    # Calculate the columns based on the selected year
+    start_column <- 62 + (selected_year - 2012) * 4
+    columns_to_plot <- start_column:(start_column + 3)
+    
+    # Select columns based on the selected year and keep only numeric columns
+    vietnam_farm_ict <- vietnam_farm %>%
+      st_drop_geometry() %>%
+      select(matches(paste0("^", selected_year, ".*(PR|farm|Others\\(\\*\\))"))) %>%
+      select_if(is.numeric) %>%
+      drop_na()  # Remove rows with any missing values
+    
+    # Check if there are any numeric columns remaining
+    if (ncol(vietnam_farm_ict) == 0 || nrow(vietnam_farm_ict) == 0) {
+      return(NULL)  # Exit if there are no numeric columns or no rows left to cluster
+    }
+    
+    # Calculate distance matrices and perform clustering
+    proxmat <- dist(vietnam_farm_ict, method = 'euclidean')
+    clustG <- hclustgeo(proxmat)
+    groups <- as.factor(cutree(clustG, k = k))
+    
+    # Add cluster information to the dataset
+    vietnam_farm_ngeo_cluster <- cbind(vietnam_farm, as.matrix(groups)) %>%
+      rename(`CLUSTER` = `as.matrix.groups.`)
+    
+    # Construct labels for scale_x_discrete outside of ggplot
+    x_labels <- setNames(
+      c("Cultivation PR", "Livestock PR", "Fishing PR", "Others PR"),
+      paste0("X", selected_year, ".", c("Cultivation.PR", "Livestock.PR", "Fishing.PR", "Others.PR"))
+    )
+    
+    # Parallel coordinates plot using the selected columns for the given year
+    ggparcoord(data = vietnam_farm_ngeo_cluster, 
+               columns = columns_to_plot, 
+               scale = "globalminmax",
+               alphaLines = 0.2,
+               boxplot = TRUE, 
+               title = paste("Multiple Parallel Coordinates Plots of ICT Variables by Cluster (", selected_year, ")", sep = "")) +
+      facet_grid(~ CLUSTER) + 
+      theme(axis.text.x = element_text(angle = 30)) +
+      scale_x_discrete(labels = x_labels)
   })
 }
 
