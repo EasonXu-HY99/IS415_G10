@@ -20,6 +20,19 @@ ui <- navbarPage(
   theme = shinytheme("flatly"),
   id = "navbarID",
   
+  tags$img(
+    src = "background.jpg",  # Ensure "background.jpg" is in the www folder
+    style = '
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.5;
+    '
+  ),
+  
   # Segmentation tab with multiple sub-tabs
   tabPanel("Segmentation",
            fluidRow(
