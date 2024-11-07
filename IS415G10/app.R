@@ -9,6 +9,32 @@ farms <- readRDS("data/rds/farms.rds")
 enterprise <- readRDS("data/rds/enterprise.rds")
 vietnam_farm <- readRDS("data/rds/vietnam_farm.rds")
 vietnam_farm <- st_as_sf(vietnam_farm)
+# Reference geospatial data (shapefile)
+vietnam_provinces <- st_read(dsn = "data/geospatial/DiaphanTinh", layer = "Dia_phan_Tinh")
+
+
+farms <- farms %>%
+  mutate(across(starts_with("20"), as.numeric)) %>%
+  mutate(across(starts_with("20"), ~ replace_na(., 0)))
+
+farms_long <- farms %>%
+  pivot_longer(cols = starts_with("20"), names_to = "year_type", values_to = "count")
+
+geospatial_provinces <- unique(vietnam_provinces$Name)
+
+farms <- farms %>%
+  filter(`Cities, provincies` %in% geospatial_provinces)
+
+vietnam_provinces <- vietnam_provinces %>%
+  rename(province_name = Name)
+
+farms_long <- farms_long %>%
+  rename(province_name = `Cities, provincies`) %>%
+  filter(!province_name %in% c("WHOLE COUNTRY", "Northern Central area and Central coastal area", 
+                               "Northern midlands and mountain areas"))
+
+vietnam_farms <- vietnam_provinces %>%
+  left_join(farms_long, by = "province_name")
 
 #========================#
 ###### Shiny UI ######
@@ -32,6 +58,7 @@ ui <- navbarPage(
       opacity: 0.5;
     '
   ),
+  # UI EDA ---------------------------------------------------------------------
   tabPanel("EDA",
            fluidRow(
              sidebarLayout(
@@ -44,8 +71,7 @@ ui <- navbarPage(
                    selectInput("type_of_farm_eda", "Type of Farm", choices = c("Cultivation", "Livestock", "Fishing", "Others"))
                  ),
                  
-                 # Common Inputs for EDA Analysis
-                 sliderInput("year_eda", "Year", min = 2012, max = 2023, value = 2012, step = 1),
+                 sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
                  
                  # Conditional input for graph format based on context in EDA tab
                  conditionalPanel(
@@ -65,10 +91,20 @@ ui <- navbarPage(
                    tabPanel("Farm",
                             h4("EDA Analysis for Farm Data"),
                             p("Explore various economic indicators related to farm types across different years. Adjust the parameters to analyze trends and distributions."),
-                            plotOutput("farm_plot"),  # Placeholder for farm data plot
+                            plotOutput("total_farms_map"),  # Total farms map for selected year
                             
                             h4("Boxplot of Selected Farm Type (2012-2023)"),
-                            plotOutput("farm_boxplot")  # Placeholder for boxplot
+                            plotOutput("farm_type_map"),  # Map for specific farm type
+                            
+                            # Additional Outputs for Spatial Analysis
+                            h4("Global Moran's I Analysis"),
+                            textOutput("global_morans_i"),  # Global Moran's I output as text
+                            
+                            h4("Local Moran's I (LISA) Map"),
+                            plotOutput("lisa_map"),  # LISA map for spatial clusters
+                            
+                            h4("Cluster Type Map"),
+                            plotOutput("cluster_type_map")  # Cluster type classification based on Local Moran's I
                    ),
                    
                    # Enterprise Tab
@@ -78,7 +114,11 @@ ui <- navbarPage(
                             plotOutput("enterprise_plot"),  # Placeholder for enterprise data plot
                             
                             h4("Time Series Analysis of Enterprise Growth (2012-2023)"),
-                            plotOutput("enterprise_timeseries")  # Placeholder for time series plot
+                            plotOutput("enterprise_timeseries"),  # Placeholder for time series plot
+                            
+                            # Additional Output for Temporal Trends
+                            h4("Temporal Trend Map for Farm Counts"),
+                            plotOutput("temporal_trend_map")  # Temporal trend map for year-by-year visualization
                    )
                  )
                )
@@ -86,7 +126,7 @@ ui <- navbarPage(
            )
   ),
            
-  # Segmentation tab with multiple sub-tabs ------------------------------------
+  # UI Segmentation -----------------------------------------------------------
   tabPanel("Segmentation",
            fluidRow(
              sidebarLayout(
@@ -207,7 +247,137 @@ ui <- navbarPage(
 
 server <- function(input, output) {
   
-  # Correlation Analysis
+  # EDA server functions ------------------------------------------------------
+  
+  
+  output$total_farms_map <- renderPlot({
+    selected_year <- as.character(input$year)
+    map_data <- vietnam_farms %>%
+      filter(year_type == paste(selected_year, "Total")) %>%
+      select(province_name, count, geometry)
+    
+    tm_shape(map_data) +
+      tm_polygons("count", title = paste(selected_year, "Total Farms"), palette = "Greens") +
+      tm_layout(legend.position = c("right", "bottom"))
+  })
+  
+  ## Plot of Specific Farm Type for a Selected Year ----------------------------
+  output$farm_type_map <- renderPlot({
+    selected_year <- as.character(input$year)
+    selected_farm_type <- input$type_of_farm_eda
+    column_name <- paste(selected_year, selected_farm_type, "farm")
+    
+    map_data <- vietnam_farms %>%
+      left_join(farms_long %>% filter(year_type == column_name), by = "province_name")
+    
+    tm_shape(map_data) +
+      tm_polygons("count", title = paste(selected_year, selected_farm_type, "Farms"), 
+                  palette = "Oranges") +
+      tm_layout(legend.position = c("right", "bottom"))
+  })
+  
+  ## Compare Farms Between Two Years -------------------------------------------
+  output$compare_farms_map <- renderPlot({
+    year_1 <- "2012"
+    year_2 <- "2019"
+    
+    map_year1 <- vietnam_farms %>%
+      left_join(farms_long %>% filter(year_type == paste(year_1, "Total")), by = "province_name")
+    map_year2 <- vietnam_farms %>%
+      left_join(farms_long %>% filter(year_type == paste(year_2, "Total")), by = "province_name")
+    
+    # Display maps side by side
+    tm1 <- tm_shape(map_year1) +
+      tm_polygons("count", title = paste(year_1, "Total Farms"), palette = "Greens") +
+      tm_layout(main.title = paste("Total Farms in", year_1), legend.position = c("right", "bottom"))
+    
+    tm2 <- tm_shape(map_year2) +
+      tm_polygons("count", title = paste(year_2, "Total Farms"), palette = "Blues") +
+      tm_layout(main.title = paste("Total Farms in", year_2), legend.position = c("right", "bottom"))
+    
+    tmap_arrange(tm1, tm2, ncol = 2)
+  })
+  
+  ## Global Moran's I ----------------------------------------------------------
+  output$global_morans_i <- renderText({
+    selected_year <- as.character(input$year)
+    map_data <- vietnam_farms %>%
+      filter(year_type == paste(selected_year, "Total")) %>%
+      select(province_name, count, geometry) %>%
+      distinct()
+    
+    neighbors <- poly2nb(map_data, queen = TRUE)
+    weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+    morans_i <- moran.test(map_data$count, weights, zero.policy = TRUE)
+    
+    paste("Moran's I:", round(morans_i$estimate[1], 4), 
+          "p-value:", round(morans_i$p.value, 4))
+  })
+  
+  ## Local Moran's I (LISA) Map ------------------------------------------------
+  output$lisa_map <- renderPlot({
+    selected_year <- as.character(input$year)
+    map_data <- vietnam_farms %>%
+      filter(year_type == paste(selected_year, "Total")) %>%
+      select(province_name, count, geometry) %>%
+      distinct()
+    
+    neighbors <- poly2nb(map_data, queen = TRUE)
+    weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+    local_morans <- localmoran(map_data$count, weights, zero.policy = TRUE)
+    map_data$local_I <- local_morans[, 1]
+    map_data$p_value <- local_morans[, 5]
+    
+    tm_shape(map_data) +
+      tm_polygons("local_I", style = "quantile", title = "Local Moran's I") +
+      tm_layout(main.title = "LISA (Local Moran's I) for Farm Counts")
+  })
+  
+  ## Cluster Types Map (High-High, Low-Low, etc.) ------------------------------
+  output$cluster_type_map <- renderPlot({
+    selected_year <- as.character(input$year)
+    map_data <- vietnam_farms %>%
+      filter(year_type == paste(selected_year, "Total")) %>%
+      select(province_name, count, geometry) %>%
+      distinct()
+    
+    neighbors <- poly2nb(map_data, queen = TRUE)
+    weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+    local_morans <- localmoran(map_data$count, weights, zero.policy = TRUE)
+    map_data$local_I <- local_morans[, 1]
+    map_data$p_value <- local_morans[, 5]
+    
+    map_data <- map_data %>%
+      mutate(cluster_type = case_when(
+        local_I > 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-High",
+        local_I > 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-Low",
+        local_I < 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-Low",
+        local_I < 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-High",
+        TRUE ~ "Not Significant"
+      ))
+    
+    tm_shape(map_data) +
+      tm_polygons("cluster_type", palette = c("red", "blue", "orange", "green", "grey"),
+                  title = "Cluster Type") +
+      tm_layout(main.title = "Cluster Types Based on Local Moran's I", 
+                legend.position = c("right", "bottom"))
+  })
+  
+  ## Temporal Trend Map for Farm Counts ----------------------------------------
+  output$temporal_trend_map <- renderPlot({
+    selected_year <- as.character(input$year)
+    map_year <- vietnam_farms %>%
+      left_join(farms_long %>% filter(year_type == paste(selected_year, "Total")), 
+                by = "province_name")
+    
+    tm_shape(map_year) +
+      tm_polygons("count", title = paste(selected_year, "Total Farms"), palette = "Blues") +
+      tm_layout(main.title = paste("Total Farms in", selected_year), legend.position = c("right", "bottom"))
+  })
+  
+  # Segmentation server functions  --------------------------------------------
+  
+  ## Correlation Analysis -----------------------------------------------------
   output$correlation_plot <- renderPlot({
     # Dynamically select columns based on the chosen year
     selected_year <- input$year
@@ -232,7 +402,7 @@ server <- function(input, output) {
     
   })
   
-  # Standardized Clustering Analysis
+  ## Standardized Clustering Analysis ------------------------------------------
   output$standardized_clustering <- renderPlot({
     selected_year <- input$year
     selected_farm_type <- input$type_of_farm
@@ -308,7 +478,7 @@ server <- function(input, output) {
     map_dbl(m, ac)  # Returns named vector with values for average, single, complete, ward
   })
   
-  # Display each agglomerative coefficient in a separate valueBox
+  ## Display each agglomerative coefficient in a separate valueBox --------------
   output$ac_average <- renderValueBox({
     valueBox(
       format(ac_values()["average"], digits = 4),
