@@ -236,7 +236,72 @@ ui <- navbarPage(
                )
              )
            )
-  )
+  ),
+  
+  # Moran tab with multiple sub-tabs
+  tabPanel("Moran",
+           fluidRow(
+             sidebarLayout(
+               sidebarPanel(
+                 style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);", 
+                 
+                 # Common Inputs for Moran
+                 selectInput("type_of_farm", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
+                 sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
+                 
+                 radioButtons("contiguity_method", "Contiguity Method",
+                              c("Queen" = TRUE,
+                                "Rook" = FALSE)),
+                 
+                 # conditionalPanel(
+                   # condition = "input.segmentation_tab == 'ClustGeo'",
+                   sliderInput("simulations", "No. of Simulations", min = 99, max = 999, value = 99, step = 100)
+                 # )
+               ),
+               
+               mainPanel(
+                 style = "margin-left:30%;",  # Adjust main panel position relative to the fixed sidebar width
+                 
+                 # Tabset with an ID to track the active sub-tab within Segmentation
+                 tabsetPanel(
+                   id = "moran_tab",  # ID to track the sub-tab
+                   
+                   # Global Moran Tab
+                   tabPanel("Global Moran",
+                            # h4("Monte Carlo's I of Farm Types for the Selected Year"),
+                            # p("This correlation analysis provides insights into the relationship between different types of farm output in the selected year. Adjust the variable 'Year' to observe how the correlations change over time. The correlation matrix displays the correlation coefficients, where values close to 1 or -1 indicate strong relationships."),
+                            plotOutput("global_moran_plot"),
+                            
+                            h4("Monte Carlo's I Stat Window"),
+                            # p("This section shows the distributions of the selected farm type data across different standardization methods (raw values, Min-Max, and Z-score) for the chosen year. Adjust 'Year' and 'Type of Farm' to explore how the data varies under each standardization method."),
+                            tableOutput("global_moran_stat"),
+                   ),
+                   
+                   # Local Moran Tab
+                   tabPanel("Local Moran",
+                            # h4("Spatial Autocorrelation for the selected Year"),
+                            # p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value m' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
+                            plotOutput("local_moran_map", height = "100vh"),
+                   ),
+                   
+                   # LISA Tab
+                   tabPanel("LISA",
+                            # h4("Ward-like Hierarchical Clustering with ClustGeo"),
+                            # p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value ' to explore different cluster groupings."),
+                            plotOutput("local_moran_lisa", height = "100vh"),
+                   ),
+                   
+                   # Hot/Cold Spot Tab
+                   tabPanel("Hot/Cold Spot",
+                            # h4("Visual Interpretation of Clusters"),
+                            # p("This boxplot shows the distribution of the selected farm type within each cluster. Adjust 'Year', 'K Value', and 'Type of Farm' to observe changes in clustering and distribution."),
+                            plotOutput("hotcoldspot_map", height = "100vh")
+                   )
+                 )
+               )
+             )
+           )
+  ),
 )
 
 
@@ -881,6 +946,234 @@ server <- function(input, output) {
       facet_grid(~ CLUSTER) + 
       theme(axis.text.x = element_text(angle = 30)) +
       scale_x_discrete(labels = x_labels)
+  })
+  
+  # Global Moran
+  output$global_moran_plot <- renderPlot({
+    # Dynamically select columns based on the chosen year
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    selected_num_simulation <- input$simulations
+    selected_contiguity_method <- input$contiguity_method
+    col_name <- paste0(selected_year, " ", selected_farm_type)
+    
+    farm_data <- vietnam_farm %>%
+      select(col_name, geometry)
+    
+    farm_data_q <- farm_data %>%
+      mutate(nb = st_contiguity(geometry, queen = selected_contiguity_method),
+             wt = st_weights(nb,
+                             style = "W"),
+             .before = 1)
+    
+    farm_data_moran_i_test_res <- global_moran_perm(farm_data_q[[col_name]],
+                                                    farm_data_q$nb,
+                                                    farm_data_q$wt,
+                                                    nsim = selected_num_simulation,
+                                                    zero.policy = TRUE, 
+                                                    na.action=na.omit)
+    
+    hist(farm_data_moran_i_test_res$res, 
+         freq=TRUE, 
+         breaks=20, 
+         xlab="Simulated Moran's I")
+    
+    abline(v=0, 
+           col="red") 
+  })
+    
+    
+  output$global_moran_stat <- renderTable({
+    # Dynamically select columns based on the chosen year
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    selected_num_simulation <- input$simulations
+    selected_contiguity_method <- input$contiguity_method
+    col_name <- paste0(selected_year, " ", selected_farm_type)
+    
+    farm_data <- vietnam_farm %>%
+      select(col_name, geometry)
+    
+    farm_data_q <- farm_data %>%
+      mutate(nb = st_contiguity(geometry, queen = selected_contiguity_method),
+             wt = st_weights(nb,
+                             style = "W"),
+             .before = 1)
+    
+    farm_data_moran_i_test_res <- global_moran_perm(farm_data_q[[col_name]],
+                                                    farm_data_q$nb,
+                                                    farm_data_q$wt,
+                                                    nsim = selected_num_simulation,
+                                                    zero.policy = TRUE, 
+                                                    na.action=na.omit)
+    
+    # Display the full test result as a table
+    
+    # Extract the required components
+    test_method <- farm_data_moran_i_test_res$method
+    statistic <- as.numeric(farm_data_moran_i_test_res[['statistic']][['statistic']])
+    observed_rank <- as.numeric(farm_data_moran_i_test_res[['parameter']][['observed rank']])
+    p_value <- format(as.numeric(farm_data_moran_i_test_res$p.value), scientific = TRUE)
+    alternative_hypothesis <- farm_data_moran_i_test_res$alternative
+    
+    # Extract sample estimates (Expectation, Variance)
+    expectation <- as.numeric(farm_data_moran_i_test_res[['estimate']][['Expectation']])
+    variance <- as.numeric(farm_data_moran_i_test_res[['estimate']][['Variance']])
+    
+    # Create the result as a data frame to display in a table
+    data.frame(
+      Test = c(test_method, 
+               paste("Number of simulations = ", observed_rank),
+               paste("Statistic = ", statistic, "Observed rank = ", observed_rank, "p-value = ", p_value),
+               paste("alternative hypothesis:", alternative_hypothesis)
+              ),
+      stringsAsFactors = FALSE
+    )
+    
+  })
+  
+  # Local Moran
+  output$local_moran_map <- renderPlot({
+    # Dynamically select columns based on the chosen year
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    selected_num_simulation <- input$simulations
+    selected_contiguity_method <- input$contiguity_method
+    col_name <- paste0(selected_year, " ", selected_farm_type)
+    
+    farm_data <- vietnam_farm %>%
+      select(col_name, geometry)
+    
+    farm_data_q <- farm_data %>%
+      mutate(nb = st_contiguity(geometry, queen = selected_contiguity_method),
+             wt = st_weights(nb,
+                             style = "W"),
+             .before = 1)
+    
+    vietnam_farm_lisa <- farm_data_q %>% 
+      mutate(local_moran = local_moran(
+        farm_data_q[[col_name]], 
+        farm_data_q$nb, 
+        farm_data_q$wt, nsim = selected_num_simulation),
+        .before = 1) %>%
+      unnest(local_moran)
+    
+    tm_shape(st_as_sf(vietnam_farm_lisa)) +
+      tm_fill("ii",
+              palette = c("#b7dce9","#e1ecbb","#f5f3a6",
+                          "#ec9a64","#d21b1c")) +
+      tm_layout(main.title = paste("Spatial Autocorrelation of Vietnam", col_name),
+                main.title.position = "center",
+                # main.title.size = 1.3,
+                # main.title.fontface = "bold",
+                legend.title.size = 1,
+                legend.text.size = 1,
+                frame = TRUE) +
+      tm_borders(col = "black", alpha = 0.6) +
+      tm_compass(type="8star", text.size = 1.5, size = 3, position=c("RIGHT", "TOP"))
+    
+  })
+  
+  # LISA
+  output$local_moran_lisa <- renderPlot({
+    # Dynamically select columns based on the chosen year
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    selected_num_simulation <- input$simulations
+    selected_contiguity_method <- input$contiguity_method
+    col_name <- paste0(selected_year, " ", selected_farm_type)
+    
+    farm_data <- vietnam_farm %>%
+      select(col_name, geometry)
+    
+    farm_data_q <- farm_data %>%
+      mutate(nb = st_contiguity(geometry, queen = selected_contiguity_method),
+             wt = st_weights(nb,
+                             style = "W"),
+             .before = 1)
+    
+    vietnam_farm_lisa <- farm_data_q %>% 
+      mutate(local_moran = local_moran(
+        farm_data_q[[col_name]], 
+        farm_data_q$nb, 
+        farm_data_q$wt, nsim = selected_num_simulation),
+        .before = 1) %>%
+      unnest(local_moran)
+    
+    vietnam_farm_lisa_sig <- vietnam_farm_lisa  %>%
+      filter(p_ii_sim < 0.05)
+    
+    tm_shape(vietnam_farm_lisa) +
+      tm_polygons() +
+      tm_borders(col = "black", alpha = 0.6)+
+      tm_shape(vietnam_farm_lisa_sig)+
+      tm_fill("mean", 
+              palette = c("#b7dce9","#ec9a64","#e1ecbb", "#d21b1c"),
+              title = "LISA class",
+              midpoint = NA,
+              legend.hist = TRUE, 
+              legend.is.portrait = TRUE,
+              legend.hist.z = 0.1) +
+      tm_borders(col = "black", alpha = 0.6)+
+      tm_layout(main.title = paste("Province-Level LISA Map of\n ", col_name),
+                main.title.position = "center",
+                main.title.size = 1.7,
+                main.title.fontface = "bold",
+                legend.outside = TRUE,
+                legend.outside.position = "right",
+                legend.title.size = 1.8,
+                legend.text.size = 1.3,
+                frame = TRUE) +
+      tm_borders(alpha = 0.5) +
+      tm_compass(type="8star", text.size = 1.5, size = 2, position=c("RIGHT", "TOP")) +
+      tm_scale_bar(position=c("LEFT", "BOTTOM"), text.size=1.2) +
+      tm_grid(labels.size = 1,alpha =0.2)
+    
+  })
+  
+  # Hot/Cold Spot
+  output$hotcoldspot_map <- renderPlot({
+    # Dynamically select columns based on the chosen year
+    selected_year <- input$year
+    selected_farm_type <- input$type_of_farm
+    selected_num_simulation <- input$simulations
+    selected_contiguity_method <- input$contiguity_method
+    col_name <- paste0(selected_year, " ", selected_farm_type)
+    
+    farm_data <- vietnam_farm %>%
+      select(col_name, geometry)
+    
+    vietnam_farm_wm <- farm_data %>%
+      mutate(nb = include_self(st_contiguity(geometry, queen = selected_contiguity_method)),
+             wt = st_inverse_distance(nb, geometry,
+                                      scale = 1,
+                                      alpha = 1),
+                                      .before = 1)
+    
+    vietnam_farm_HCSA <- vietnam_farm_wm %>% 
+      mutate(local_Gi_star = local_gstar_perm(vietnam_farm_wm[[col_name]], 
+                                              nb, 
+                                              vietnam_farm_wm$wt, nsim = selected_num_simulation),
+                                              .before = 1) %>%
+                                              unnest(local_Gi_star)
+    
+    tm_shape(vietnam_farm_HCSA) +
+      tm_fill("gi_star", 
+              palette = c("#57bfc0", "#7977f3","#f8d673","#f8b675","#f67774"),
+              title = "Gi*",
+              midpoint = 0) +
+      tm_borders(col = "black", alpha = 0.6) +
+      tm_layout(main.title = paste("Hotspots & Coldspots of\n ", col_name),
+                main.title.position = "center",
+                main.title.size = 1.5,
+                main.title.fontface = "bold",
+                legend.title.size = 1,
+                legend.text.size = 1,
+                frame = TRUE) +
+      tm_compass(type="8star", text.size = 1.5, size = 3, position=c("RIGHT", "TOP")) +
+      tm_scale_bar(position=c("LEFT", "BOTTOM"), text.size=1.2) +
+      tm_grid(labels.size = 1, alpha = 0.2)
+    
   })
 }
 
