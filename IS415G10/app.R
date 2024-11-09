@@ -32,7 +32,70 @@ ui <- navbarPage(
       opacity: 0.5;
     '
   ),
-  
+  # Moran tab with multiple sub-tabs
+  tabPanel("Moran",
+           fluidRow(
+             sidebarLayout(
+               sidebarPanel(
+                 style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);", 
+                 
+                 # Common Inputs for Moran
+                 selectInput("type_of_farms", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
+                 sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
+                 
+                 radioButtons("contiguity_method", "Contiguity Method",
+                              c("Queen" = TRUE,
+                                "Rook" = FALSE)),
+                 
+                 # conditionalPanel(
+                 # condition = "input.segmentation_tab == 'ClustGeo'",
+                 sliderInput("simulations", "No. of Simulations", min = 99, max = 999, value = 99, step = 100)
+                 # )
+               ),
+               
+               mainPanel(
+                 style = "margin-left:30%;",  # Adjust main panel position relative to the fixed sidebar width
+                 
+                 # Tabset with an ID to track the active sub-tab within Segmentation
+                 tabsetPanel(
+                   id = "moran_tab",  # ID to track the sub-tab
+                   
+                   # Global Moran Tab
+                   tabPanel("Global Moran",
+                            # h4("Monte Carlo's I of Farm Types for the Selected Year"),
+                            # p("This correlation analysis provides insights into the relationship between different types of farm output in the selected year. Adjust the variable 'Year' to observe how the correlations change over time. The correlation matrix displays the correlation coefficients, where values close to 1 or -1 indicate strong relationships."),
+                            plotOutput("global_moran_plot"),
+                            
+                            h4("Monte Carlo's I Stat Window"),
+                            # p("This section shows the distributions of the selected farm type data across different standardization methods (raw values, Min-Max, and Z-score) for the chosen year. Adjust 'Year' and 'Type of Farm' to explore how the data varies under each standardization method."),
+                            tableOutput("global_moran_stat"),
+                   ),
+                   
+                   # Local Moran Tab
+                   tabPanel("Local Moran",
+                            # h4("Spatial Autocorrelation for the selected Year"),
+                            # p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value m' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
+                            plotOutput("local_moran_map", height = "100vh"),
+                   ),
+                   
+                   # LISA Tab
+                   tabPanel("LISA",
+                            # h4("Ward-like Hierarchical Clustering with ClustGeo"),
+                            # p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value ' to explore different cluster groupings."),
+                            plotOutput("local_moran_lisa", height = "100vh"),
+                   ),
+                   
+                   # Hot/Cold Spot Tab
+                   tabPanel("Hot/Cold Spot",
+                            # h4("Visual Interpretation of Clusters"),
+                            # p("This boxplot shows the distribution of the selected farm type within each cluster. Adjust 'Year', 'K Value', and 'Type of Farm' to observe changes in clustering and distribution."),
+                            plotOutput("hotcoldspot_map", height = "100vh")
+                   )
+                 )
+               )
+             )
+           )
+  ),
   # Segmentation tab with multiple sub-tabs
   tabPanel("Segmentation",
            fluidRow(
@@ -144,71 +207,6 @@ ui <- navbarPage(
              )
            )
   ),
-  
-  # Moran tab with multiple sub-tabs
-  tabPanel("Moran",
-           fluidRow(
-             sidebarLayout(
-               sidebarPanel(
-                 style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);", 
-                 
-                 # Common Inputs for Moran
-                 selectInput("type_of_farm", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
-                 sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
-                 
-                 radioButtons("contiguity_method", "Contiguity Method",
-                              c("Queen" = TRUE,
-                                "Rook" = FALSE)),
-                 
-                 # conditionalPanel(
-                   # condition = "input.segmentation_tab == 'ClustGeo'",
-                   sliderInput("simulations", "No. of Simulations", min = 99, max = 999, value = 99, step = 100)
-                 # )
-               ),
-               
-               mainPanel(
-                 style = "margin-left:30%;",  # Adjust main panel position relative to the fixed sidebar width
-                 
-                 # Tabset with an ID to track the active sub-tab within Segmentation
-                 tabsetPanel(
-                   id = "moran_tab",  # ID to track the sub-tab
-                   
-                   # Global Moran Tab
-                   tabPanel("Global Moran",
-                            # h4("Monte Carlo's I of Farm Types for the Selected Year"),
-                            # p("This correlation analysis provides insights into the relationship between different types of farm output in the selected year. Adjust the variable 'Year' to observe how the correlations change over time. The correlation matrix displays the correlation coefficients, where values close to 1 or -1 indicate strong relationships."),
-                            plotOutput("global_moran_plot"),
-                            
-                            h4("Monte Carlo's I Stat Window"),
-                            # p("This section shows the distributions of the selected farm type data across different standardization methods (raw values, Min-Max, and Z-score) for the chosen year. Adjust 'Year' and 'Type of Farm' to explore how the data varies under each standardization method."),
-                            tableOutput("global_moran_stat"),
-                   ),
-                   
-                   # Local Moran Tab
-                   tabPanel("Local Moran",
-                            # h4("Spatial Autocorrelation for the selected Year"),
-                            # p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value m' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
-                            plotOutput("local_moran_map", height = "100vh"),
-                   ),
-                   
-                   # LISA Tab
-                   tabPanel("LISA",
-                            # h4("Ward-like Hierarchical Clustering with ClustGeo"),
-                            # p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value ' to explore different cluster groupings."),
-                            plotOutput("local_moran_lisa", height = "100vh"),
-                   ),
-                   
-                   # Hot/Cold Spot Tab
-                   tabPanel("Hot/Cold Spot",
-                            # h4("Visual Interpretation of Clusters"),
-                            # p("This boxplot shows the distribution of the selected farm type within each cluster. Adjust 'Year', 'K Value', and 'Type of Farm' to observe changes in clustering and distribution."),
-                            plotOutput("hotcoldspot_map", height = "100vh")
-                   )
-                 )
-               )
-             )
-           )
-  ),
 )
 
 
@@ -252,6 +250,8 @@ server <- function(input, output) {
     
     # Construct the column name based on the selected year and farm type
     column_name <- paste0(selected_year, " ", selected_farm_type, " PR")
+    
+    print(column_name)
     
     # Prepare data for the selected column
     farm_data <- vietnam_farm %>%
@@ -729,7 +729,7 @@ server <- function(input, output) {
   output$global_moran_plot <- renderPlot({
     # Dynamically select columns based on the chosen year
     selected_year <- input$year
-    selected_farm_type <- input$type_of_farm
+    selected_farm_type <- input$type_of_farms
     selected_num_simulation <- input$simulations
     selected_contiguity_method <- input$contiguity_method
     col_name <- paste0(selected_year, " ", selected_farm_type)
@@ -763,7 +763,7 @@ server <- function(input, output) {
   output$global_moran_stat <- renderTable({
     # Dynamically select columns based on the chosen year
     selected_year <- input$year
-    selected_farm_type <- input$type_of_farm
+    selected_farm_type <- input$type_of_farms
     selected_num_simulation <- input$simulations
     selected_contiguity_method <- input$contiguity_method
     col_name <- paste0(selected_year, " ", selected_farm_type)
@@ -813,7 +813,7 @@ server <- function(input, output) {
   output$local_moran_map <- renderPlot({
     # Dynamically select columns based on the chosen year
     selected_year <- input$year
-    selected_farm_type <- input$type_of_farm
+    selected_farm_type <- input$type_of_farms
     selected_num_simulation <- input$simulations
     selected_contiguity_method <- input$contiguity_method
     col_name <- paste0(selected_year, " ", selected_farm_type)
@@ -855,7 +855,7 @@ server <- function(input, output) {
   output$local_moran_lisa <- renderPlot({
     # Dynamically select columns based on the chosen year
     selected_year <- input$year
-    selected_farm_type <- input$type_of_farm
+    selected_farm_type <- input$type_of_farms
     selected_num_simulation <- input$simulations
     selected_contiguity_method <- input$contiguity_method
     col_name <- paste0(selected_year, " ", selected_farm_type)
@@ -912,7 +912,7 @@ server <- function(input, output) {
   output$hotcoldspot_map <- renderPlot({
     # Dynamically select columns based on the chosen year
     selected_year <- input$year
-    selected_farm_type <- input$type_of_farm
+    selected_farm_type <- input$type_of_farms
     selected_num_simulation <- input$simulations
     selected_contiguity_method <- input$contiguity_method
     col_name <- paste0(selected_year, " ", selected_farm_type)
