@@ -65,11 +65,13 @@ ui <- navbarPage(
                sidebarPanel(
                  style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);",
                  
-                 # Conditional panel for Type of Farm selection
-                 conditionalPanel(
-                   condition = "input.eda_tab == 'Farm' || input.eda_tab == 'Enterprise'",
-                   selectInput("type_of_farm_eda", "Type of Farm", choices = c("Cultivation", "Livestock", "Fishing", "Others"))
-                 ),
+                 # # Conditional panel for Type of Farm selection
+                 # conditionalPanel(
+                 #   condition = "input.eda_tab == 'Farm' || input.eda_tab == 'Enterprise'",
+                 #   selectInput("type_of_farm_eda", "Type of Farm", choices = c("Cultivation", "Livestock", "Fishing", "Others"))
+                 # ),
+                 selectInput("type_of_farm", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
+                 
                  
                  sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
                  
@@ -238,7 +240,7 @@ ui <- navbarPage(
            )
   ),
   
-  # Moran tab with multiple sub-tabs
+  # Moran tab with multiple sub-tabs ------------------------------------------
   tabPanel("Moran",
            fluidRow(
              sidebarLayout(
@@ -328,17 +330,25 @@ server <- function(input, output) {
   
   ## Plot of Specific Farm Type for a Selected Year ----------------------------
   output$farm_type_map <- renderPlot({
-    selected_year <- as.character(input$year)
-    selected_farm_type <- input$type_of_farm_eda
-    column_name <- paste(selected_year, selected_farm_type, "farm")
+    # Dynamically select farm type based on input
+    selected_farm_type <- input$type_of_farm
+    col_pattern <- paste0(".*", selected_farm_type, "$")  # Regex pattern to match columns ending with the selected farm type
     
-    map_data <- vietnam_farms %>%
-      left_join(farms_long %>% filter(year_type == column_name), by = "province_name")
+    # Select columns for all years with the specified farm type
+    map_data <- vietnam_farm %>%
+      pivot_longer(cols = matches(col_pattern), names_to = "year", values_to = "value") %>%
+      mutate(year = sub(paste0(" ", selected_farm_type, "$"), "", year))  # Remove farm type suffix to get the year
     
-    tm_shape(map_data) +
-      tm_polygons("count", title = paste(selected_year, selected_farm_type, "Farms"), 
-                  palette = "Oranges") +
-      tm_layout(legend.position = c("right", "bottom"))
+    # Check if the data frame is empty
+    if (nrow(map_data) == 0) return(NULL)
+    
+    # Create boxplot with year as x-axis and values as y-axis
+    ggplot(data = map_data, aes(x = as.factor(year), y = value)) +
+      geom_boxplot() +
+      labs(title = paste("Boxplot of", selected_farm_type, "across Years"),
+           x = "Year",
+           y = paste("Total number of", selected_farm_type)) +
+      theme_minimal()
   })
   
   ## Compare Farms Between Two Years -------------------------------------------
