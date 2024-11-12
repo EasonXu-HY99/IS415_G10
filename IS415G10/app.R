@@ -198,8 +198,8 @@ ui <- navbarPage(
                             p("This boxplot shows the distribution of the selected farm type within each cluster. Adjust 'Year', 'K Value', and 'Type of Farm' to observe changes in clustering and distribution."),
                             plotOutput("cluster_boxplot"),
                             
-                            h4("Parallel Coordinates Plot for ICT Variables by Cluster"),
-                            p("The parallel coordinates plot displays multiple ICT variables across clusters for the selected year. Adjust 'Year' and 'K Value' to examine changes in clustering patterns."),
+                            h4("Parallel Coordinates Plot for farm percentage Variables by Cluster"),
+                            p("The parallel coordinates plot displays multiple farm percentage variables across clusters for the selected year. Adjust 'Year' and 'K Value' to examine changes in clustering patterns."),
                             plotOutput("parallel_coordinates_plot")
                    )
                  )
