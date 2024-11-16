@@ -144,7 +144,7 @@
     "href": "guide.html",
     "title": "User Guide",
     "section": "",
-    "text": "This page will contain user guide."
+    "text": "Navigate to Farm tab\n\n&lt;YOUR SCREENSHOT GOES HERE&gt;\n\nIn the Farm tab, wait for the page to load. You should be able to see the different plots of…… . You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nFormat of Graph\n\n\n\n\n\n\nNavigate to Enterprise tab\n\n\n\nIn the Farm tab, wait for the page to load. You should be able to see a horizontal bar chart of provinces for EDA Analysis for Enterprise Data. You can also configure your analysis on the left sidebar by setting the options below:\n\nYear"
   },
   {
     "objectID": "poster.html",
@@ -152,5 +152,26 @@
     "title": "Poster",
     "section": "",
     "text": "Project Poster"
+  },
+  {
+    "objectID": "guide.html#exploratory-data-analysis",
+    "href": "guide.html#exploratory-data-analysis",
+    "title": "User Guide",
+    "section": "",
+    "text": "Navigate to Farm tab\n\n&lt;YOUR SCREENSHOT GOES HERE&gt;\n\nIn the Farm tab, wait for the page to load. You should be able to see the different plots of…… . You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nFormat of Graph\n\n\n\n\n\n\nNavigate to Enterprise tab\n\n\n\nIn the Farm tab, wait for the page to load. You should be able to see a horizontal bar chart of provinces for EDA Analysis for Enterprise Data. You can also configure your analysis on the left sidebar by setting the options below:\n\nYear"
+  },
+  {
+    "objectID": "guide.html#global-and-local-measures-of-spatial-autocorrelation",
+    "href": "guide.html#global-and-local-measures-of-spatial-autocorrelation",
+    "title": "User Guide",
+    "section": "Global and Local Measures of Spatial Autocorrelation",
+    "text": "Global and Local Measures of Spatial Autocorrelation\n\nGlobal Moran\n\nNavigate to Moran tab\n\n\n\nIn the Global Moran tab, wait for the page to load. You should be able to see a Histogram showing the simulated results of the Moran’s I. You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nContiguity Method\nNumber of simulations\n\n\n\n\nLocal Moran\n\nNavigate to Local Moran tab\n\n\n\nIn the Local Moran tab, wait for the page to load. You should be able to see a map showing the Spatial Autocorrelation of the Vietnam map. You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nContiguity Method\nNumber of simulations\n\n\n\n\nLocal Indicators of Spatial Association (LISA)\n\nNavigate to LISA tab\n\n\n\nIn the LISA tab, wait for the page to load. You should be able to see a map showing the Province-Level LISA of the Vietnam map. You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nContiguity Method\nNumber of simulations\n\n\n\n\nHot/Cold Spot Analysis\n\nNavigate to Hot/Cold Spot tab\n\n\n\nIn the Hot/Cold Spot tab, wait for the page to load. You should be able to see a map showing the Hot/Cold Spots of the Vietnam map. You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nContiguity Method\nNumber of simulations"
+  },
+  {
+    "objectID": "guide.html#geographical-segmentation",
+    "href": "guide.html#geographical-segmentation",
+    "title": "User Guide",
+    "section": "Geographical Segmentation",
+    "text": "Geographical Segmentation\n\nCorrelation\n\nNavigate to Correlation tab\n\n\n\n\n\n\nIn the Correlation tab, wait for the page to load. You should be able to see the different plots Correlation Analysis, Standardized Clustering Analysis, Agglomerative Coefficient and Gap Statistic for Clustering, Cluster Dendrogram with User-Defined Number of Clusters, and Clustered Map of Regions Based on Selected Year and Cluster Count. You can also configure your analysis on the left sidebar by setting the options below:\n\nType of Farm\nYear\nFormat of Graph\nK-value\n\n\n\n\nSKATER\n\nNavigate to SKATER tab\n\n\n\n\nIn the SKATER tab, wait for the page to load. You should be able to see the plots containing Choropleth Map of SKATER Spatial Clusters, and Comparison of Hierarchical and SKATER Cluster Maps. You can also configure your analysis on the left sidebar by setting the options below:\n\nYear\nK-value\n\n\n\n\nClustGeo\n\nNavigate to ClustGeo tab\n\n\n\nIn the ClustGeo tab, wait for the page to load. You should be able to see the plots containing Ward-like Hierarchical Clustering with ClustGeo, Mapping the Clusters Formed by ClustGeo, Spatially Constrained Hierarchical Clustering and Mapping Clusters Formed by Spatially Constrained ClustGeo. You can also configure your analysis on the left sidebar by setting the options below:\n\nYear\nK-value\nAlpha (Spatial Constraint)\n\n\n\n\nVisuals\n\nNavigate to Visuals tab\n\n\n\n\nIn the Visuals tab, wait for the page to load. You should be able to see the plots containing Visual Interpretation of Clusters and Parallel Coordinates Plot for farm percentage Variables by Cluster. You can also configure your analysis on the left sidebar by setting the options below:\n\nType of farm\nYear\nK-value"
   }
 ]
