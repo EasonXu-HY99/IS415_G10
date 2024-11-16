@@ -670,7 +670,7 @@ server <- function(input, output, session) {
       ) +
       tm_layout(
         main.title = paste0("LISA (Local Moran's I) for ", selected_farm_type, " in ", selected_year),
-        main.title.size = 1.5,
+        main.title.size = 0.8,
         main.title.position = "center",
         main.title.fontface = "bold",
         legend.outside = TRUE,
@@ -723,7 +723,7 @@ server <- function(input, output, session) {
       tm_layout(main.title = "Cluster Types Based on Local Moran's I",
                 legend.outside = TRUE,
                 legend.position = c("right", "bottom"),
-                main.title.size = 1.5,
+                main.title.size = 1.0,
                 main.title.position = "center",
                 main.title.fontface = "bold",
                 outer.margins = c(0.05, 0.05, 0.05, 0.05))
