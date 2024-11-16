@@ -4,7 +4,7 @@ title: "Project Overview"
 
 # **Geospatial Analytics Project**
 
-Welcome to our geospatial analytics project website. This project focuses on Vietnam and applies **Analytical Regionalisation**, **Geographical Segmentation**, and **Geographically Weighted Regression Models** (GWR) to investigate the country’s economic development from 2012 to 2023 using geospatial data and web-based tools.
+Welcome to our geospatial analytics project website. This project focuses on Vietnam and applies **Analytical Regionalisation** and **Geographical Segmentation** to investigate the country’s economic development from 2012 to 2023 using geospatial data and web-based tools.
 
 ### **Motivation**
 

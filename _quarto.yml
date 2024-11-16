@@ -15,8 +15,9 @@ website:
         text: User Guide
       - href: poster.qmd
         text: Poster
-      - href: Research Paper.pdf
-        text: Research Paper
+      - href: "https://haiyangeason.shinyapps.io/is415g10/"
+        text: ShinyApp
+        
 format:
   html:
     theme: cosmo
