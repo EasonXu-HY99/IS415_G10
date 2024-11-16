@@ -323,7 +323,10 @@ server <- function(input, output, session) {
       tm_layout(
         legend.position = c("right", "bottom"),
         main.title = paste("Total Farms in", selected_year),
-        main.title.size = 1.2
+        main.title.size = 1.5,
+        main.title.position = "center",
+        main.title.fontface = "bold",
+        outer.margins = c(0.1, 0.1, 0.1, 0.1)
       )
   })
   
@@ -508,7 +511,11 @@ server <- function(input, output, session) {
       tm_borders() +
       tm_layout(
         main.title = paste("LISA (Local Moran's I) for", selected_year, "Farm Counts"),
-        legend.position = c("right", "bottom")
+        legend.position = c("right", "bottom"),
+        main.title.size = 1.0,
+        main.title.position = "center",
+        main.title.fontface = "bold",
+        outer.margins = c(0.1, 0.1, 0.1, 0.1)
       )
   })
   
@@ -554,7 +561,11 @@ server <- function(input, output, session) {
       tm_polygons("cluster_type", palette = c("red", "blue", "orange", "green", "grey"),
                   title = "Cluster Type") +
       tm_layout(main.title = "Cluster Types Based on Local Moran's I", 
-                legend.position = c("right", "bottom"))
+                legend.position = c("right", "bottom"),
+                main.title.size = 1.0,
+                main.title.position = "center",
+                main.title.fontface = "bold",
+                outer.margins = c(0.1, 0.1, 0.1, 0.1))
   })
   
   ### Enterprise tab -----------------------------------------------------------
