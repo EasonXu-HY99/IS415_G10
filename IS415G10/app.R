@@ -10,6 +10,7 @@ enterprise <- readRDS("data/rds/enterprise.rds")
 vietnam_farm <- readRDS("data/rds/vietnam_farm.rds")
 vietnam_farm <- st_as_sf(vietnam_farm)
 
+
 #========================#
 ###### Shiny UI ######
 #========================#  
@@ -32,24 +33,6 @@ ui <- navbarPage(
       opacity: 0.5;
     '
   ),
-  ui <- navbarPage(
-    title = "VietEcoMap",
-    fluid = TRUE,
-    theme = shinytheme("flatly"),
-    id = "navbarID",
-    
-    tags$img(
-      src = "background.jpg",  # Ensure "background.jpg" is in the www folder
-      style = '
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.5;
-    '
-    ),
     # UI EDA ---------------------------------------------------------------------
     tabPanel("EDA",
              fluidRow(
@@ -57,20 +40,16 @@ ui <- navbarPage(
                  sidebarPanel(
                    style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);",
                    
-                   # # Conditional panel for Type of Farm selection
-                   # conditionalPanel(
-                   #   condition = "input.eda_tab == 'Farm' || input.eda_tab == 'Enterprise'",
-                   #   selectInput("type_of_farm_eda", "Type of Farm", choices = c("Cultivation", "Livestock", "Fishing", "Others"))
-                   # ),
-                   selectInput("type_of_farm", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
-                   
-                   
-                   sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
-                   
                    # Conditional input for graph format based on context in EDA tab
                    conditionalPanel(
                      condition = "input.eda_tab == 'Farm'",
+                     selectInput("type_of_farms", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
+                     sliderInput("year_farm", "Year", min = 2012, max = 2023, value = 2012, step = 1),
                      selectInput("graph_format_eda", "Format of Graph", choices = c("Boxplot", "Line Plot", "Bar Chart"))
+                   ),
+                   conditionalPanel(
+                     condition = "input.eda_tab == 'Enterprise'",
+                     sliderInput("year_enterprise", "Year", min = 2016, max = 2023, value = 2016, step = 1),
                    )
                  ),
                  
@@ -87,7 +66,7 @@ ui <- navbarPage(
                               p("Explore various economic indicators related to farm types across different years. Adjust the parameters to analyze trends and distributions."),
                               plotOutput("total_farms_map"),  # Total farms map for selected year
                               
-                              h4("Boxplot of Selected Farm Type (2012-2023)"),
+                              h4("Graph of Selected Farm Type (2012-2023)"),
                               plotOutput("farm_type_map"),  # Map for specific farm type
                               
                               # Additional Outputs for Spatial Analysis
@@ -105,14 +84,14 @@ ui <- navbarPage(
                      tabPanel("Enterprise",
                               h4("EDA Analysis for Enterprise Data"),
                               p("Analyze enterprise-related indicators and trends over time. Adjust the settings to customize the visualization."),
-                              plotOutput("enterprise_plot"),  # Placeholder for enterprise data plot
+                              plotOutput("enterprise_plot", height = "800px"),
                               
-                              h4("Time Series Analysis of Enterprise Growth (2012-2023)"),
-                              plotOutput("enterprise_timeseries"),  # Placeholder for time series plot
+                              h4("Time Series Analysis of Enterprise Growth (2016-2023)"),
+                              plotOutput("enterprise_timeseries", height = "300px"),  # Optional: Adjust height for other plots
                               
                               # Additional Output for Temporal Trends
                               h4("Temporal Trend Map for Farm Counts"),
-                              plotOutput("temporal_trend_map")  # Temporal trend map for year-by-year visualization
+                              plotOutput("temporal_trend_map", height = "400px")  # Temporal trend map for year-by-year visualization
                      )
                    )
                  )
@@ -302,7 +281,371 @@ ui <- navbarPage(
 ###### Shiny Server ######
 #========================#  
 
-server <- function(input, output) {
+server <- function(input, output, session) {
+  
+  # EDA server functions ------------------------------------------------------
+  observe({
+    if (input$navbarID == "Farm") {
+      # Update year slider for Farm tab
+      updateSliderInput(session, "Year", value = 2012, min = 2012, max = 2023)
+    } else if (input$navbarID == "Enterprise") {
+      # Update year slider for Enterprise tab
+      updateSliderInput(session, "Year", value = 2016, min = 2016, max = 2023)
+    }
+  })
+  
+  output$total_farms_map <- renderPlot({
+    selected_year <- as.character(input$year_farm)  # Convert the year input to a string
+    column_name <- paste0(selected_year, " Total")  # Construct the column name dynamically
+    
+    # Join vietnam_farm with vietnam_geo to add geometries
+    map_data <- vietnam_geo %>%
+      left_join(
+        vietnam_farm %>%
+          st_drop_geometry() %>%  # Remove geometry for easier manipulation
+          select(`Cities, provincies`, all_of(column_name)) %>%
+          rename(count = all_of(column_name)),
+        by = c("Name" = "Cities, provincies")  # Match provinces by name
+      )
+    
+    # Check if map_data is valid
+    if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
+      return(NULL)  # Return NULL if no data exists for the selected year
+    }
+    
+    # Plot the map using tmap
+    tm_shape(map_data) +
+      tm_polygons(
+        "count",
+        title = paste(selected_year, "Total Farms"),
+        palette = "Greens"
+      ) +
+      tm_layout(
+        legend.position = c("right", "bottom"),
+        main.title = paste("Total Farms in", selected_year),
+        main.title.size = 1.2
+      )
+  })
+  
+  
+  ## Plot of Specific Farm Type for a Selected Year ----------------------------
+  output$farm_type_map <- renderPlot({
+    # Dynamically select farm type based on input
+    selected_farm_type <- input$type_of_farms
+    selected_format <- input$graph_format_eda  # Graph format selected from dropdown
+    selected_year <- as.character(input$year_farm)
+    
+    # Define regex pattern to match columns ending with the selected farm type
+    col_pattern <- paste0("^\\d{4} ", selected_farm_type, "$")
+    
+    tryCatch({
+      # Process data
+      map_data <- vietnam_farm %>%
+        st_drop_geometry() %>% 
+        select(matches(col_pattern)) %>%
+        pivot_longer(
+          cols = everything(),  # Reshape all selected columns
+          names_to = "year", 
+          values_to = "value"
+        ) %>%
+        mutate(
+          year = as.numeric(sub(paste0(" ", selected_farm_type, "$"), "", year))  # Extract year from column name
+        ) %>%
+        group_by(year) %>%
+        summarise(total_value = sum(value, na.rm = TRUE))  # Aggregate values by year
+      
+      map_data_boxplot <- vietnam_farm %>% 
+        st_drop_geometry() %>%
+        pivot_longer(cols = matches(col_pattern), names_to = "year", values_to = "value") %>%
+        mutate(year = sub(paste0(" ", selected_farm_type, "$"), "", year))
+      
+      # Check if the data frame is empty
+      if (nrow(map_data) == 0) {
+        stop("No data available for the selected farm type and format.")
+      }
+      
+      # Plot based on the selected format
+      if (selected_format == "Boxplot") {
+        ggplot(data = map_data_boxplot, aes(x = as.factor(year), y = value)) +
+          geom_boxplot() +
+          labs(title = paste("Boxplot of", selected_farm_type, "across Years"),
+               x = "Year",
+               y = paste("Total number of", selected_farm_type)) +
+          theme_minimal()
+      } else if (selected_format == "Line Plot") {
+        ggplot(map_data, aes(x = year, y = total_value, group = 1)) +
+          geom_line() +
+          geom_point() +
+          labs(
+            title = paste("Line Plot of", selected_farm_type, "across Years"),
+            x = "Year",
+            y = "Total Value"
+          ) +
+          theme_minimal()
+      } else if (selected_format == "Bar Chart") {
+        ggplot(map_data, aes(x = as.factor(year), y = total_value)) +
+          geom_bar(stat = "identity", fill = "steelblue") +
+          labs(
+            title = paste("Bar Chart of", selected_farm_type, "across Years"),
+            x = "Year",
+            y = "Total Value"
+          ) +
+          theme_minimal()
+      }
+    }, error = function(e) {
+      # Debugging: Print useful messages
+      message("Error encountered: ", e$message)
+      ggplot() +
+        geom_text(aes(0.5, 0.5, label = "No matching data found. Please check your selection.")) +
+        theme_void()
+    })
+  })
+  
+  
+  ## Compare Farms Between Two Years -------------------------------------------
+  output$compare_farms_map <- renderPlot({
+    year_1 <- "2012"
+    year_2 <- "2019"
+    
+    map_year1 <- vietnam_farm %>%
+      left_join(farms_long %>% filter(year_type == paste(year_1, "Total")), by = "province_name")
+    map_year2 <- vietnam_farm %>%
+      left_join(farms_long %>% filter(year_type == paste(year_2, "Total")), by = "province_name")
+    
+    # Display maps side by side
+    tm1 <- tm_shape(map_year1) +
+      tm_polygons("count", title = paste(year_1, "Total Farms"), palette = "Greens") +
+      tm_layout(main.title = paste("Total Farms in", year_1), legend.position = c("right", "bottom"))
+    
+    tm2 <- tm_shape(map_year2) +
+      tm_polygons("count", title = paste(year_2, "Total Farms"), palette = "Blues") +
+      tm_layout(main.title = paste("Total Farms in", year_2), legend.position = c("right", "bottom"))
+    
+    tmap_arrange(tm1, tm2, ncol = 2)
+  })
+  
+  ## Global Moran's I ----------------------------------------------------------
+  output$global_morans_i <- renderText({
+    selected_year <- as.character(input$year_farm)  # Convert the year input to a string
+    column_name <- paste0(selected_year, " Total")  # Dynamically construct the column name
+    
+    # Join vietnam_farm with vietnam_geo to add geometries
+    map_data <- vietnam_geo %>%
+      left_join(
+        vietnam_farm %>%
+          st_drop_geometry() %>%  # Remove geometry for easier manipulation
+          select(`Cities, provincies`, all_of(column_name)) %>%
+          rename(count = all_of(column_name)),
+        by = c("Name" = "Cities, provincies")  # Match provinces by name
+      ) %>%
+      filter(!is.na(count))  # Remove rows with NA counts
+    
+    # Check if map_data is valid
+    if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
+      return("No valid data available for the selected year.")  # Return a message if no data exists
+    }
+    
+    # Create spatial neighbors and weights
+    neighbors <- poly2nb(map_data, queen = TRUE)
+    weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+    
+    # Calculate Moran's I
+    morans_i <- moran.test(map_data$count, weights, zero.policy = TRUE)
+    
+    # Return Moran's I statistic and p-value
+    paste(
+      "Moran's I:", round(morans_i$estimate[1], 4), 
+      "p-value:", round(morans_i$p.value, 4)
+    )
+  })
+  
+  
+  ## Local Moran's I (LISA) Map ------------------------------------------------
+  output$lisa_map <- renderPlot({
+    selected_year <- as.character(input$year_farm)  # Convert year input to string
+    column_name <- paste0(selected_year, " Total")  # Construct the column name dynamically
+    
+    # Join vietnam_farm with vietnam_geo to add geometries
+    map_data <- vietnam_geo %>%
+      left_join(
+        vietnam_farm %>%
+          st_drop_geometry() %>%  # Remove geometry for easier manipulation
+          select(`Cities, provincies`, all_of(column_name)) %>%
+          rename(count = all_of(column_name)),
+        by = c("Name" = "Cities, provincies")  # Match provinces by name
+      ) %>%
+      filter(!is.na(count))  # Remove rows with NA counts
+    
+    # Check if map_data is valid
+    if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
+      return(ggplot() +
+               geom_text(aes(0.5, 0.5, label = "No valid data available for the selected year.")) +
+               theme_void())
+    }
+    
+    # Create spatial neighbors and weights
+    neighbors <- poly2nb(map_data, queen = TRUE)
+    weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+    
+    # Calculate Local Moran's I
+    local_morans <- localmoran(map_data$count, weights, zero.policy = TRUE)
+    map_data$local_I <- local_morans[, 1]  # Local Moran's I values
+    map_data$p_value <- local_morans[, 5]  # P-values
+    
+    # Classify clusters based on Local Moran's I and p-value
+    map_data <- map_data %>%
+      mutate(cluster_type = case_when(
+        local_I > 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-High",
+        local_I > 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-Low",
+        local_I < 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-Low",
+        local_I < 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-High",
+        TRUE ~ "Not Significant"
+      ))
+    
+    # Plot the LISA map
+    tm_shape(map_data) +
+      tm_polygons("local_I", style = "quantile", title = "Local Moran's I", palette = "RdYlBu") +
+      tm_borders() +
+      tm_layout(
+        main.title = paste("LISA (Local Moran's I) for", selected_year, "Farm Counts"),
+        legend.position = c("right", "bottom")
+      )
+  })
+  
+
+  
+  ## Cluster Types Map (High-High, Low-Low, etc.) ------------------------------
+  output$cluster_type_map <- renderPlot({
+    selected_year <- as.character(input$year_farm)  # Convert the year input to a string
+    column_name <- paste0(selected_year, " Total")  # Dynamically construct the column name
+    
+    # Join vietnam_farm with vietnam_geo to add geometries
+    map_data <- vietnam_geo %>%
+      left_join(
+        vietnam_farm %>%
+          st_drop_geometry() %>%  # Remove geometry for easier manipulation
+          select(`Cities, provincies`, all_of(column_name)) %>%
+          rename(count = all_of(column_name)),
+        by = c("Name" = "Cities, provincies")  # Match provinces by name
+      ) %>%
+      filter(!is.na(count))  # Remove rows with NA counts
+    
+    # Check if map_data is valid
+    if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
+      return("No valid data available for the selected year.")  # Return a message if no data exists
+    }
+    
+    neighbors <- poly2nb(map_data, queen = TRUE)
+    weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+    local_morans <- localmoran(map_data$count, weights, zero.policy = TRUE)
+    map_data$local_I <- local_morans[, 1]
+    map_data$p_value <- local_morans[, 5]
+    
+    map_data <- map_data %>%
+      mutate(cluster_type = case_when(
+        local_I > 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-High",
+        local_I > 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-Low",
+        local_I < 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-Low",
+        local_I < 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-High",
+        TRUE ~ "Not Significant"
+      ))
+    
+    tm_shape(map_data) +
+      tm_polygons("cluster_type", palette = c("red", "blue", "orange", "green", "grey"),
+                  title = "Cluster Type") +
+      tm_layout(main.title = "Cluster Types Based on Local Moran's I", 
+                legend.position = c("right", "bottom"))
+  })
+  
+  ### Enterprise tab -----------------------------------------------------------
+  output$enterprise_plot <- renderPlot({
+    # Extract the year from input
+    selected_year <- as.character(input$year_enterprise)
+    
+    # Filter data for the selected year
+    enterprise_data <- enterprise %>%
+      select(`Cities, provincies`, all_of(selected_year)) %>%
+      rename(province_name = `Cities, provincies`, value = all_of(selected_year))
+    
+    # Generate a bar chart of enterprise data for the selected year
+    ggplot(enterprise_data, aes(x = reorder(province_name, -value), y = value)) +
+      geom_bar(stat = "identity", fill = "steelblue") +
+      coord_flip() +  # Flip coordinates for better readability
+      labs(
+        title = paste("Enterprise Count in", selected_year),
+        x = "Province",
+        y = "Enterprise Count"
+      ) +
+      theme_minimal() +
+      theme(axis.text.y = element_text(size = 8))
+  }, height = 800)
+  
+  # Enterprise Time Series Analysis
+  output$enterprise_timeseries <- renderPlot({
+    # Reshape the enterprise data for time series analysis
+    enterprise_data_long <- enterprise %>%
+      pivot_longer(cols = starts_with("20"), names_to = "year", values_to = "value") %>%
+      group_by(year) %>%
+      summarise(total_value = sum(value, na.rm = TRUE))
+    
+    # Generate a time series plot for enterprise growth
+    ggplot(enterprise_data_long, aes(x = as.numeric(year), y = total_value, group = 1)) +
+      geom_line(color = "blue") +
+      geom_point(color = "darkblue") +
+      labs(
+        title = "Time Series Analysis of Enterprise Growth (2016-2023)",
+        x = "Year",
+        y = "Total Enterprise Count"
+      ) +
+      theme_minimal()
+  })
+  
+  # Temporal Trend Map for Enterprise Data
+  output$temporal_trend_map <- renderPlot({
+  
+  # Reshape the enterprise data for mapping
+  enterprise_data_long <- enterprise %>%
+    pivot_longer(
+      cols = starts_with("20"), 
+      names_to = "year", 
+      values_to = "value"
+    ) %>%
+    rename(province_name = `Cities, provincies`) %>%  # Replace with the correct name if needed
+    mutate(year = as.character(year))  # Convert year to character
+  
+  # Merge enterprise data with spatial data
+  map_data <- vietnam_geo %>%
+    rename(province_name = Name) %>%  # Ensure consistent column names
+    left_join(enterprise_data_long, by = "province_name")  # Join on province_name
+  
+  # Filter for the selected year
+  selected_year <- as.character(input$year_enterprise)
+  map_data_year <- map_data %>%
+    filter(year == selected_year)
+  
+  # Debug: Check data for the selected year
+  print(paste("Data for Year:", selected_year))
+  print(head(map_data_year))
+  
+  # Check if data exists for the selected year
+  if (nrow(map_data_year) == 0) {
+    ggplot() +
+      annotate("text", x = 0.5, y = 0.5, label = "No data available for the selected year.", size = 6, hjust = 0.5) +
+      theme_void()
+  } else {
+    # Plot the temporal trend map
+    tm_shape(map_data_year) +
+      tm_polygons(
+        "value", 
+        title = paste("Enterprise Count in", selected_year), 
+        palette = "Blues"
+      ) +
+      tm_layout(legend.position = c("right", "bottom"))
+  }
+})
+
+  
+
   
   # Correlation Analysis
   output$correlation_plot <- renderPlot({
