@@ -32,6 +32,93 @@ ui <- navbarPage(
       opacity: 0.5;
     '
   ),
+  ui <- navbarPage(
+    title = "VietEcoMap",
+    fluid = TRUE,
+    theme = shinytheme("flatly"),
+    id = "navbarID",
+    
+    tags$img(
+      src = "background.jpg",  # Ensure "background.jpg" is in the www folder
+      style = '
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.5;
+    '
+    ),
+    # UI EDA ---------------------------------------------------------------------
+    tabPanel("EDA",
+             fluidRow(
+               sidebarLayout(
+                 sidebarPanel(
+                   style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);",
+                   
+                   # # Conditional panel for Type of Farm selection
+                   # conditionalPanel(
+                   #   condition = "input.eda_tab == 'Farm' || input.eda_tab == 'Enterprise'",
+                   #   selectInput("type_of_farm_eda", "Type of Farm", choices = c("Cultivation", "Livestock", "Fishing", "Others"))
+                   # ),
+                   selectInput("type_of_farm", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
+                   
+                   
+                   sliderInput("year", "Year", min = 2012, max = 2023, value = 2012, step = 1),
+                   
+                   # Conditional input for graph format based on context in EDA tab
+                   conditionalPanel(
+                     condition = "input.eda_tab == 'Farm'",
+                     selectInput("graph_format_eda", "Format of Graph", choices = c("Boxplot", "Line Plot", "Bar Chart"))
+                   )
+                 ),
+                 
+                 mainPanel(
+                   style = "margin-left:30%;",  # Adjust main panel position relative to the fixed sidebar width
+                   
+                   # TabsetPanel for Farm and Enterprise views
+                   tabsetPanel(
+                     id = "eda_tab",  # ID to track the active sub-tab
+                     
+                     # Farm Tab
+                     tabPanel("Farm",
+                              h4("EDA Analysis for Farm Data"),
+                              p("Explore various economic indicators related to farm types across different years. Adjust the parameters to analyze trends and distributions."),
+                              plotOutput("total_farms_map"),  # Total farms map for selected year
+                              
+                              h4("Boxplot of Selected Farm Type (2012-2023)"),
+                              plotOutput("farm_type_map"),  # Map for specific farm type
+                              
+                              # Additional Outputs for Spatial Analysis
+                              h4("Global Moran's I Analysis"),
+                              textOutput("global_morans_i"),  # Global Moran's I output as text
+                              
+                              h4("Local Moran's I (LISA) Map"),
+                              plotOutput("lisa_map"),  # LISA map for spatial clusters
+                              
+                              h4("Cluster Type Map"),
+                              plotOutput("cluster_type_map")  # Cluster type classification based on Local Moran's I
+                     ),
+                     
+                     # Enterprise Tab
+                     tabPanel("Enterprise",
+                              h4("EDA Analysis for Enterprise Data"),
+                              p("Analyze enterprise-related indicators and trends over time. Adjust the settings to customize the visualization."),
+                              plotOutput("enterprise_plot"),  # Placeholder for enterprise data plot
+                              
+                              h4("Time Series Analysis of Enterprise Growth (2012-2023)"),
+                              plotOutput("enterprise_timeseries"),  # Placeholder for time series plot
+                              
+                              # Additional Output for Temporal Trends
+                              h4("Temporal Trend Map for Farm Counts"),
+                              plotOutput("temporal_trend_map")  # Temporal trend map for year-by-year visualization
+                     )
+                   )
+                 )
+               )
+             )
+    ),
   # Moran tab with multiple sub-tabs
   tabPanel("Moran",
            fluidRow(
