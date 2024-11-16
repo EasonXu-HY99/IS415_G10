@@ -33,71 +33,138 @@ ui <- navbarPage(
       opacity: 0.5;
     '
   ),
+  tags$head(
+    tags$style(HTML("
+    /* General Layout Fix */
+    .sidebarPanel {
+      background-color: #f8f9fa; /* Light grey for contrast */
+    }
+
+    /* Desktop-specific layout */
+    @media (min-width: 769px) {
+    .sidebarPanel {
+      width: 25% !important; /* Sidebar occupies 25% of the screen */
+      position: fixed !important; /* Fixed position to keep it visible while scrolling */
+      top: 50% !important; /* Center it vertically */
+      left: 2% !important; /* Align it slightly away from the left edge */
+      transform: translateY(-50%) !important; /* Adjust for vertical centering */
+      z-index: 1000; /* Ensure it's on top of other elements */
+      background-color: #ffffff !important; /* Optional: Add background for better visibility */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for emphasis */
+      padding: 15px; /* Add padding for better spacing */
+      border-radius: 8px; /* Optional: Rounded corners */
+    }
+    
+    .mainPanel {
+      width: 73% !important; /* Main panel takes the rest of the space */
+      float: left !important;
+      margin-left: 27% !important; /* Ensure it doesn't overlap the sidebar */
+    }
+  }
+
+    /* Mobile-specific layout */
+    @media (max-width: 768px) {
+      .sidebarPanel {
+        width: 100% !important; /* Sidebar takes full width */
+        float: none !important;
+        margin-bottom: 20px; /* Add spacing between stacked panels */
+      }
+      .mainPanel {
+        width: 100% !important; /* Main panel takes full width */
+        float: none !important;
+      }
+    }
+  "))
+  ),
     # UI EDA ---------------------------------------------------------------------
-    tabPanel("EDA",
-             fluidRow(
-               sidebarLayout(
-                 sidebarPanel(
-                   style = "position: fixed; width: 25%; left: 2%; top: 50%; transform: translateY(-50%);",
-                   
-                   # Conditional input for graph format based on context in EDA tab
-                   conditionalPanel(
-                     condition = "input.eda_tab == 'Farm'",
-                     selectInput("type_of_farms", "Type of Farm", choices = c("Cultivation farm", "Livestock farm", "Fishing farm", "Others(*)")),
-                     sliderInput("year_farm", "Year", min = 2012, max = 2023, value = 2012, step = 1),
-                     selectInput("graph_format_eda", "Format of Graph", choices = c("Boxplot", "Line Plot", "Bar Chart"))
-                   ),
-                   conditionalPanel(
-                     condition = "input.eda_tab == 'Enterprise'",
-                     sliderInput("year_enterprise", "Year", min = 2016, max = 2023, value = 2016, step = 1),
-                   )
-                 ),
+  tabPanel("EDA",
+           fluidRow(
+             # Sidebar Panel for Inputs
+             column(
+               width = 3,  # Sidebar column occupies 25% on desktop
+               class = "sidebarPanel",
+               h3("Data Exploration Controls"),
+               p("Customize your analysis by selecting farm or enterprise data, choosing a year, and specifying the desired graph format."),
+               conditionalPanel(
+                 condition = "input.eda_tab == 'Farm'",
+                 h3("Farm Data Settings"),
+                 selectInput("type_of_farms", "Select Farm Type", choices = c("Cultivation farm", "Livestock farm", "Fishing farm")),
+                 sliderInput("year_farm", "Select Year for Farm Data", min = 2012, max = 2023, value = 2012, step = 1),
+                 selectInput("graph_format_eda", "Graph Format", choices = c("Boxplot", "Line Plot", "Bar Chart"))
+               ),
+               conditionalPanel(
+                 condition = "input.eda_tab == 'Enterprise'",
+                 h5("Enterprise Data Settings"),
+                 sliderInput("year_enterprise", "Select Year for Enterprise Data", min = 2016, max = 2023, value = 2016, step = 1),
+                 p("Note: Enterprise data is available starting from 2016.")
+               )
+             ),
+             
+             # Main Panel for Outputs
+             column(
+               width = 9,  # Main column occupies 75% on desktop
+               class = "mainPanel",
+               tabsetPanel(
+                 id = "eda_tab",  # ID to track the active sub-tab
                  
-                 mainPanel(
-                   style = "margin-left:30%;",  # Adjust main panel position relative to the fixed sidebar width
+                 tabPanel(
+                   "Farm",
+                   h2("Exploratory Data Analysis (Farm)"),
+                   p("Dive into detailed farm-related data across different regions and years. Visualize patterns and understand spatial dependencies."),
+                   fluidRow(
+                     column(6, plotOutput("total_farms_map", height = "400px")),
+                     column(6, plotOutput("farms_by_type_map", height = "400px"))
+                   ),
+                   h3("Farm Type Graph (2012-2023)"),
+                   plotOutput("farm_type_map", height = "400px"),
                    
-                   # TabsetPanel for Farm and Enterprise views
-                   tabsetPanel(
-                     id = "eda_tab",  # ID to track the active sub-tab
-                     
-                     # Farm Tab
-                     tabPanel("Farm",
-                              h4("EDA Analysis for Farm Data"),
-                              p("Explore various economic indicators related to farm types across different years. Adjust the parameters to analyze trends and distributions."),
-                              plotOutput("total_farms_map"),  # Total farms map for selected year
-                              
-                              h4("Graph of Selected Farm Type (2012-2023)"),
-                              plotOutput("farm_type_map"),  # Map for specific farm type
-                              
-                              # Additional Outputs for Spatial Analysis
-                              h4("Global Moran's I Analysis"),
-                              textOutput("global_morans_i"),  # Global Moran's I output as text
-                              
-                              h4("Local Moran's I (LISA) Map"),
-                              plotOutput("lisa_map"),  # LISA map for spatial clusters
-                              
-                              h4("Cluster Type Map"),
-                              plotOutput("cluster_type_map")  # Cluster type classification based on Local Moran's I
+                   # Spatial Analysis Section
+                   h2("Spatial Analysis"),
+                   p("Analyze spatial patterns and dependencies in farm data using Moran's I and cluster maps."),
+                   
+                   # Global Moran's I Analysis Section
+                   h3("Global Moran's I Analysis"),
+                   textOutput("global_morans_i"),
+                   p("Moran's I is a statistical measure used to assess the degree of spatial autocorrelation in data."),
+                   p("A positive Moran's I indicates clustering of similar values, while a negative Moran's I indicates a dispersion of dissimilar values."),
+                   tags$ul(
+                     tags$li("Positive Moran's I (> 0): Similar values cluster together geographically."),
+                     tags$li("Negative Moran's I (< 0): Dissimilar values are adjacent."),
+                     tags$li("Moran's I close to 0: No significant spatial clustering (random pattern).")
+                   ),
+                   
+                   # LISA Map Section
+                   h3("Local Moran's I (LISA) and Cluster Type Maps"),
+                   fluidRow(
+                     column(6, 
+                            plotOutput("lisa_map", height = "400px"),
+                            p("LISA (Local Moran's I) provides insights into localized spatial clusters and patterns."),
+                            p("High-High clusters represent areas where regions with high values are surrounded by other high-value regions."),
+                            p("Low-High or High-Low clusters identify outliers in the data.")
                      ),
-                     
-                     # Enterprise Tab
-                     tabPanel("Enterprise",
-                              h4("EDA Analysis for Enterprise Data"),
-                              p("Analyze enterprise-related indicators and trends over time. Adjust the settings to customize the visualization."),
-                              plotOutput("enterprise_plot", height = "800px"),
-                              
-                              h4("Time Series Analysis of Enterprise Growth (2016-2023)"),
-                              plotOutput("enterprise_timeseries", height = "300px"),  # Optional: Adjust height for other plots
-                              
-                              # Additional Output for Temporal Trends
-                              h4("Temporal Trend Map for Farm Counts"),
-                              plotOutput("temporal_trend_map", height = "400px")  # Temporal trend map for year-by-year visualization
+                     column(6, 
+                            plotOutput("cluster_type_map", height = "400px"),
+                            p("Cluster maps highlight regions with statistically significant spatial patterns based on Moran's I.")
                      )
                    )
+                   
+                 ),
+                 
+                 tabPanel(
+                   "Enterprise",
+                   h3("Exploratory Data Analysis (Enterprise)"),
+                   p("Explore enterprise-related indicators and trends across provinces. Visualize growth patterns and identify economic hotspots."),
+                   h4("Enterprise Data Visualization"),
+                   plotOutput("enterprise_plot", height = "800px"),
+                   h4("Time Series Analysis of Enterprise Growth (2016-2023)"),
+                   plotOutput("enterprise_timeseries", height = "300px"),
+                   h4("Temporal Trends in Enterprise Data"),
+                   plotOutput("temporal_trend_map", height = "400px")
                  )
                )
              )
-    ),
+           )
+  ),
   # Moran tab with multiple sub-tabs
   tabPanel("Moran",
            fluidRow(
@@ -321,12 +388,51 @@ server <- function(input, output, session) {
         palette = "Greens"
       ) +
       tm_layout(
+        legend.outside = TRUE,
         legend.position = c("right", "bottom"),
         main.title = paste("Total Farms in", selected_year),
         main.title.size = 1.5,
         main.title.position = "center",
         main.title.fontface = "bold",
-        outer.margins = c(0.1, 0.1, 0.1, 0.1)
+        outer.margins = c(0.05, 0.05, 0.05, 0.05)
+      )
+  })
+  
+  output$farms_by_type_map <- renderPlot({
+    selected_year <- as.character(input$year_farm)  # Get the selected year as a string
+    selected_type <- input$type_of_farms  # Get the selected type of farm
+    column_name <- paste0(selected_year, " ", selected_type)  # Construct the column name dynamically
+    
+    # Join vietnam_farm with vietnam_geo to add geometries
+    map_data <- vietnam_geo %>%
+      left_join(
+        vietnam_farm %>%
+          st_drop_geometry() %>%  # Remove geometry for easier manipulation
+          select(`Cities, provincies`, all_of(column_name)) %>%
+          rename(count = all_of(column_name)),
+        by = c("Name" = "Cities, provincies")  # Match provinces by name
+      )
+    
+    # Check if map_data is valid
+    if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
+      return(NULL)  # Return NULL if no data exists for the selected year and type
+    }
+    
+    # Plot the map using tmap
+    tm_shape(map_data) +
+      tm_polygons(
+        "count",
+        title = paste(selected_type, "Farms in", selected_year),
+        palette = "Blues"
+      ) +
+      tm_layout(
+        legend.outside = TRUE,
+        legend.position = c("right", "bottom"),
+        main.title = paste(selected_type, "Farms in", selected_year),
+        main.title.size = 1.0,
+        main.title.position = "center",
+        main.title.fontface = "bold",
+        outer.margins = c(0.05, 0.05, 0.05, 0.05)
       )
   })
   
@@ -464,9 +570,68 @@ server <- function(input, output, session) {
   
   
   ## Local Moran's I (LISA) Map ------------------------------------------------
+  # output$lisa_map <- renderPlot({
+  #   selected_year <- as.character(input$year_farm)  # Convert year input to string
+  #   column_name <- paste0(selected_year, " Total")  # Construct the column name dynamically
+  #   
+  #   # Join vietnam_farm with vietnam_geo to add geometries
+  #   map_data <- vietnam_geo %>%
+  #     left_join(
+  #       vietnam_farm %>%
+  #         st_drop_geometry() %>%  # Remove geometry for easier manipulation
+  #         select(`Cities, provincies`, all_of(column_name)) %>%
+  #         rename(count = all_of(column_name)),
+  #       by = c("Name" = "Cities, provincies")  # Match provinces by name
+  #     ) %>%
+  #     filter(!is.na(count))  # Remove rows with NA counts
+  #   
+  #   # Check if map_data is valid
+  #   if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
+  #     return(ggplot() +
+  #              geom_text(aes(0.5, 0.5, label = "No valid data available for the selected year.")) +
+  #              theme_void())
+  #   }
+  #   
+  #   # Create spatial neighbors and weights
+  #   neighbors <- poly2nb(map_data, queen = TRUE)
+  #   weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+  #   
+  #   # Calculate Local Moran's I
+  #   local_morans <- localmoran(map_data$count, weights, zero.policy = TRUE)
+  #   map_data$local_I <- local_morans[, 1]  # Local Moran's I values
+  #   map_data$p_value <- local_morans[, 5]  # P-values
+  #   
+  #   # Classify clusters based on Local Moran's I and p-value
+  #   map_data <- map_data %>%
+  #     mutate(cluster_type = case_when(
+  #       local_I > 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-High",
+  #       local_I > 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-Low",
+  #       local_I < 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-Low",
+  #       local_I < 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-High",
+  #       TRUE ~ "Not Significant"
+  #     ))
+  #   
+  #   # Plot the LISA map
+  #   tm_shape(map_data) +
+  #     tm_polygons("local_I", style = "quantile", title = "Local Moran's I", palette = "RdYlBu") +
+  #     tm_borders() +
+  #     tm_layout(
+  #       main.title = paste("LISA (Local Moran's I) for", selected_year, "Farm Counts"),
+  #       legend.position = c("right", "bottom"),
+  #       main.title.size = 1.0,
+  #       main.title.position = "center",
+  #       main.title.fontface = "bold",
+  #       outer.margins = c(0.1, 0.1, 0.1, 0.1)
+  #     )
+  # })
+  
   output$lisa_map <- renderPlot({
-    selected_year <- as.character(input$year_farm)  # Convert year input to string
-    column_name <- paste0(selected_year, " Total")  # Construct the column name dynamically
+    # Get the selected year and farm type from user input
+    selected_year <- as.character(input$year_farm)
+    selected_farm_type <- as.character(input$type_of_farms)
+    
+    # Dynamically construct the column name for the selected year and farm type
+    column_name <- paste0(selected_year, " ", selected_farm_type)
     
     # Join vietnam_farm with vietnam_geo to add geometries
     map_data <- vietnam_geo %>%
@@ -474,48 +639,43 @@ server <- function(input, output, session) {
         vietnam_farm %>%
           st_drop_geometry() %>%  # Remove geometry for easier manipulation
           select(`Cities, provincies`, all_of(column_name)) %>%
-          rename(count = all_of(column_name)),
+          rename(count = all_of(column_name)),  # Rename column for simplicity
         by = c("Name" = "Cities, provincies")  # Match provinces by name
-      ) %>%
-      filter(!is.na(count))  # Remove rows with NA counts
+      )
     
-    # Check if map_data is valid
+    # Ensure data is valid for spatial analysis
     if (nrow(map_data) == 0 || all(is.na(map_data$count))) {
-      return(ggplot() +
-               geom_text(aes(0.5, 0.5, label = "No valid data available for the selected year.")) +
-               theme_void())
+      return(NULL)  # If no valid data, return NULL
     }
     
-    # Create spatial neighbors and weights
+    # Compute neighbors and spatial weights
     neighbors <- poly2nb(map_data, queen = TRUE)
     weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
     
-    # Calculate Local Moran's I
+    # Compute Local Moran's I
     local_morans <- localmoran(map_data$count, weights, zero.policy = TRUE)
+    
+    # Add results to the map_data
     map_data$local_I <- local_morans[, 1]  # Local Moran's I values
-    map_data$p_value <- local_morans[, 5]  # P-values
+    map_data$p_value <- local_morans[, 5]  # p-values
     
-    # Classify clusters based on Local Moran's I and p-value
-    map_data <- map_data %>%
-      mutate(cluster_type = case_when(
-        local_I > 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-High",
-        local_I > 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-Low",
-        local_I < 0 & p_value < 0.05 & count > mean(count, na.rm = TRUE) ~ "High-Low",
-        local_I < 0 & p_value < 0.05 & count < mean(count, na.rm = TRUE) ~ "Low-High",
-        TRUE ~ "Not Significant"
-      ))
-    
-    # Plot the LISA map
+    # Plot the LISA Map
     tm_shape(map_data) +
-      tm_polygons("local_I", style = "quantile", title = "Local Moran's I", palette = "RdYlBu") +
-      tm_borders() +
+      tm_polygons(
+        "local_I",
+        title = paste0("Local Moran's I (", selected_farm_type, " in ", selected_year, ")"),
+        palette = "RdYlBu",
+        style = "quantile",
+        n = 5
+      ) +
       tm_layout(
-        main.title = paste("LISA (Local Moran's I) for", selected_year, "Farm Counts"),
-        legend.position = c("right", "bottom"),
-        main.title.size = 1.0,
+        main.title = paste0("LISA (Local Moran's I) for ", selected_farm_type, " in ", selected_year),
+        main.title.size = 1.5,
         main.title.position = "center",
         main.title.fontface = "bold",
-        outer.margins = c(0.1, 0.1, 0.1, 0.1)
+        legend.outside = TRUE,
+        legend.position = c("right", "bottom"),
+        outer.margins = c(0.05, 0.05, 0.05, 0.05)
       )
   })
   
@@ -560,12 +720,13 @@ server <- function(input, output, session) {
     tm_shape(map_data) +
       tm_polygons("cluster_type", palette = c("red", "blue", "orange", "green", "grey"),
                   title = "Cluster Type") +
-      tm_layout(main.title = "Cluster Types Based on Local Moran's I", 
+      tm_layout(main.title = "Cluster Types Based on Local Moran's I",
+                legend.outside = TRUE,
                 legend.position = c("right", "bottom"),
-                main.title.size = 1.0,
+                main.title.size = 1.5,
                 main.title.position = "center",
                 main.title.fontface = "bold",
-                outer.margins = c(0.1, 0.1, 0.1, 0.1))
+                outer.margins = c(0.05, 0.05, 0.05, 0.05))
   })
   
   ### Enterprise tab -----------------------------------------------------------
