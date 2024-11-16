@@ -8,15 +8,15 @@ title: "User Guide"
 
 -   Navigate to Farm tab
 
-\<YOUR SCREENSHOT GOES HERE\>
+![](images/clipboard-3668155184.png)
 
--   In the Farm tab, wait for the page to load. You should be able to see the different plots of...... . You can also configure your analysis on the left sidebar by setting the options below:
+-   In the Farm tab, wait for the page to load. You should be able to see the different plots of total farms per year, total farms per year by type, Local Moran's I (LISA) and Cluster Type Maps. You can also configure your analysis on the left sidebar by setting the options below:
 
-    -   Type of Farm
+    -   Type of Farm (Cultivation, Livestock, Fishing)
 
-    -   Year
+    -   Year (From 2012 to 2023)
 
-    -   Format of Graph
+    -   Format of Graph (Boxplot, Line Graph, Bar Chart)
 
 ### Enterprise
 
@@ -26,7 +26,7 @@ title: "User Guide"
 
 -   In the Farm tab, wait for the page to load. You should be able to see a horizontal bar chart of provinces for EDA Analysis for Enterprise Data. You can also configure your analysis on the left sidebar by setting the options below:
 
-    -   Year
+    -   Year (From 2016 to 2023)
 
 ## **Global and Local Measures of Spatial Autocorrelation**
 
