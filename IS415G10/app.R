@@ -49,7 +49,7 @@ ui <- navbarPage(
       left: 2% !important; /* Align it slightly away from the left edge */
       transform: translateY(-50%) !important; /* Adjust for vertical centering */
       z-index: 1000; /* Ensure it's on top of other elements */
-      background-color: #ffffff !important; /* Optional: Add background for better visibility */
+      background-color: #E9ECEF !important; /* Optional: Add background for better visibility */
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for emphasis */
       padding: 15px; /* Add padding for better spacing */
       border-radius: 8px; /* Optional: Rounded corners */
