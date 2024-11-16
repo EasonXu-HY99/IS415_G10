@@ -2,4 +2,162 @@
 title: "User Guide"
 ---
 
-This page will contain user guide.
+## Exploratory Data Analysis
+
+### Farm
+
+-   Navigate to Farm tab
+
+\<YOUR SCREENSHOT GOES HERE\>
+
+-   In the Farm tab, wait for the page to load. You should be able to see the different plots of...... . You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of Farm
+
+    -   Year
+
+    -   Format of Graph
+
+### Enterprise
+
+-   Navigate to Enterprise tab
+
+![](images/clipboard-238974576.png)
+
+-   In the Farm tab, wait for the page to load. You should be able to see a horizontal bar chart of provinces for EDA Analysis for Enterprise Data. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Year
+
+## **Global and Local Measures of Spatial Autocorrelation**
+
+### Global Moran
+
+-   Navigate to Moran tab
+
+![](images/clipboard-1902982173.png)
+
+-   In the Global Moran tab, wait for the page to load. You should be able to see a Histogram showing the simulated results of the Moran's I. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of Farm
+
+    -   Year
+
+    -   Contiguity Method
+
+    -   Number of simulations
+
+### Local Moran
+
+-   Navigate to Local Moran tab
+
+![](images/clipboard-3187288573.png)
+
+-   In the Local Moran tab, wait for the page to load. You should be able to see a map showing the Spatial Autocorrelation of the Vietnam map. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of Farm
+
+    -   Year
+
+    -   Contiguity Method
+
+    -   Number of simulations
+
+### Local Indicators of Spatial Association (LISA)
+
+-   Navigate to LISA tab
+
+![](images/clipboard-3163399788.png)
+
+-   In the LISA tab, wait for the page to load. You should be able to see a map showing the Province-Level LISA of the Vietnam map. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of Farm
+
+    -   Year
+
+    -   Contiguity Method
+
+    -   Number of simulations
+
+### Hot/Cold Spot Analysis
+
+-   Navigate to Hot/Cold Spot tab
+
+![](images/clipboard-4243453490.png)
+
+-   In the Hot/Cold Spot tab, wait for the page to load. You should be able to see a map showing the Hot/Cold Spots of the Vietnam map. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of Farm
+
+    -   Year
+
+    -   Contiguity Method
+
+    -   Number of simulations
+
+## Geographical Segmentation
+
+### Correlation
+
+-   Navigate to Correlation tab
+
+![](images/clipboard-4250888163.png)
+
+![](images/clipboard-1603705368.png)
+
+![](images/clipboard-947297361.png)
+
+![](images/clipboard-540089887.png)
+
+-   In the Correlation tab, wait for the page to load. You should be able to see the different plots Correlation Analysis, Standardized Clustering Analysis, Agglomerative Coefficient and Gap Statistic for Clustering, Cluster Dendrogram with User-Defined Number of Clusters, and Clustered Map of Regions Based on Selected Year and Cluster Count. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of Farm
+
+    -   Year
+
+    -   Format of Graph
+
+    -   K-value
+
+### SKATER
+
+-   Navigate to SKATER tab
+
+![](images/clipboard-2578928688.png)
+
+![](images/clipboard-1982283619.png)
+
+-   In the SKATER tab, wait for the page to load. You should be able to see the plots containing Choropleth Map of SKATER Spatial Clusters, and Comparison of Hierarchical and SKATER Cluster Maps. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Year
+
+    -   K-value
+
+### ClustGeo
+
+-   Navigate to ClustGeo tab
+
+![](images/clipboard-625660258.png)
+
+-   In the ClustGeo tab, wait for the page to load. You should be able to see the plots containing Ward-like Hierarchical Clustering with ClustGeo, Mapping the Clusters Formed by ClustGeo, Spatially Constrained Hierarchical Clustering and Mapping Clusters Formed by Spatially Constrained ClustGeo. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Year
+
+    -   K-value
+
+    -   Alpha (Spatial Constraint)
+
+### Visuals
+
+-   Navigate to Visuals tab
+
+![](images/clipboard-4235232921.png)
+
+![](images/clipboard-940171066.png)
+
+-   In the Visuals tab, wait for the page to load. You should be able to see the plots containing Visual Interpretation of Clusters and Parallel Coordinates Plot for farm percentage Variables by Cluster. You can also configure your analysis on the left sidebar by setting the options below:
+
+    -   Type of farm
+
+    -   Year
+
+    -   K-value
