@@ -196,7 +196,13 @@ ui <- navbarPage(
                    # Global Moran Tab
                    tabPanel("Global Moran",
                             # h4("Monte Carlo's I of Farm Types for the Selected Year"),
-                            # p("This correlation analysis provides insights into the relationship between different types of farm output in the selected year. Adjust the variable 'Year' to observe how the correlations change over time. The correlation matrix displays the correlation coefficients, where values close to 1 or -1 indicate strong relationships."),
+                            p("Moran's I is a statistical measure used to assess the degree of spatial autocorrelation in data."),
+                            p("A positive Moran's I indicates clustering of similar values, while a negative Moran's I indicates a dispersion of dissimilar values."),
+                            tags$ul(
+                              tags$li("Positive Moran's I (> 0): Similar values cluster together geographically."),
+                              tags$li("Negative Moran's I (< 0): Dissimilar values are adjacent."),
+                              tags$li("Moran's I close to 0: No significant spatial clustering (random pattern).")
+                            ),
                             plotOutput("global_moran_plot"),
                             
                             h4("Monte Carlo's I Stat Window"),
@@ -207,21 +213,23 @@ ui <- navbarPage(
                    # Local Moran Tab
                    tabPanel("Local Moran",
                             # h4("Spatial Autocorrelation for the selected Year"),
-                            # p("This choropleth map displays spatial clusters using the SKATER method based on the selected year and the number of clusters derived from the 'K Value m' slider. Adjusting 'Year' and 'K Value' will dynamically update the spatial clusters."),
+                            p("This choropleth map displays spatial clusters using the Local Moran's I Test Monte-Carlo simulation method based on the selected year, computing the weight using Queen or Rook method, and the number of permutations in the test adjusted through the 'no. of simulations' slider."),
+                            p("Local Moran visualisation of Spatial Autocorrelation to measure and understand the weight of clusters in each provinces"),
                             plotOutput("local_moran_map", height = "100vh"),
                    ),
                    
                    # LISA Tab
                    tabPanel("LISA",
                             # h4("Ward-like Hierarchical Clustering with ClustGeo"),
-                            # p("This clustering analysis uses the Ward-like hierarchical clustering method from the ClustGeo package. Adjust the 'Year' and 'K Value ' to explore different cluster groupings."),
+                            p("The LISA Cluster Map shows the significant locations color coded by type of spatial autocorrelation."),
+                            p("LISA measures the degree of significant spatial clustering of similar values around each observation."),
                             plotOutput("local_moran_lisa", height = "100vh"),
                    ),
                    
                    # Hot/Cold Spot Tab
                    tabPanel("Hot/Cold Spot",
                             # h4("Visual Interpretation of Clusters"),
-                            # p("This boxplot shows the distribution of the selected farm type within each cluster. Adjust 'Year', 'K Value', and 'Type of Farm' to observe changes in clustering and distribution."),
+                            p("Emerging hot spot Analysis (EHSA) assess how hot and cold spots change over time. Hot spot indicates high concentration of economic activity and Cold spot indicates low concentration of economic activity."),
                             plotOutput("hotcoldspot_map", height = "100vh")
                    )
                  )
