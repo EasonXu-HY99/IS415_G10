@@ -190,17 +190,16 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="project-summary" class="level2">
 <h2 class="anchored" data-anchor-id="project-summary"><strong>Project Summary:</strong></h2>
-<p>Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing three main datasets: “Number of farms by kinds of economic activity and by province,” “Number of newly established enterprises by province,” and “Index of Industrial production by province.” By incorporating geospatial data, we aim to explore the economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.</p>
+<p>Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing two main datasets: “Number of farms by kinds of economic activity and by province” and “Number of newly established enterprises by province.” By incorporating geospatial data, we aim to explore the farm economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.</p>
 <section id="motivation" class="level3">
 <h3 class="anchored" data-anchor-id="motivation"><strong>Motivation:</strong></h3>
-<p>Vietnam’s rapid economic growth in recent years has positioned it as a key player in the ASEAN region. As a member of ASEAN, Vietnam shares strong economic ties with countries like Singapore, which is one of its largest trading partners. Understanding Vietnam’s economic development, particularly in terms of agriculture, industry, and enterprise growth at the provincial level, is crucial for assessing the country’s future trajectory within the regional economic landscape.</p>
+<p>Vietnam’s rapid economic growth in recent years has positioned it as a key player in the ASEAN region. As a member of ASEAN, Vietnam shares strong economic ties with countries like Singapore, which is one of its largest trading partners. Understanding Vietnam’s economic development, particularly in terms of agriculture and enterprise growth at the provincial level, is crucial for assessing the country’s future trajectory within the regional economic landscape.</p>
 <p>This analysis can offer valuable insights into how Vietnam’s internal economic dynamics may influence and interact with broader ASEAN trade and investment patterns. By identifying regional disparities and growth trends, we can contribute to better policymaking and investment decisions not only for Vietnam but also for ASEAN partners seeking opportunities in Vietnam’s developing markets. This type of analysis becomes especially important as Vietnam strives for greater integration into the global economy while balancing its role within ASEAN.</p>
 </section>
 <section id="problems-or-issues" class="level3">
 <h3 class="anchored" data-anchor-id="problems-or-issues"><strong>Problems or Issues:</strong></h3>
 <ol type="1">
 <li><p><strong>Regional Economic Disparities:</strong> Despite Vietnam’s overall economic growth, there are notable disparities between provinces, especially between more industrialized urban areas and agricultural rural regions. Understanding the spatial distribution of growth and inequality across the country will help identify regions that may be lagging behind and in need of policy attention.</p></li>
-<li><p><strong>Balancing Agricultural and Industrial Development:</strong> Vietnam’s economy has historically relied heavily on agriculture, but recent industrialization efforts have shifted the focus toward manufacturing and services. This shift may affect rural provinces that still depend on agriculture. Our analysis will explore how different provinces are transitioning between these sectors and how this shift might impact the future of both agriculture and industry.</p></li>
 <li><p><strong>Inter-Regional Economic Dependencies within ASEAN:</strong> Vietnam’s economic development is closely tied to its relationships with other ASEAN countries like Singapore. As trade and investment flows increase within ASEAN, understanding how Vietnam’s internal economic structure supports or hinders these relationships is crucial. Regional economic dependencies and potential bottlenecks must be addressed for sustained growth in both Vietnam and ASEAN.</p></li>
 </ol>
 </section>
@@ -217,24 +216,21 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><p>“Number of farms by kinds of economic activity and by province” dataset (2012-2023), sourced from the <strong>General Statistics Office</strong> (<a href="https://www.gso.gov.vn/en/homepage/">GSO</a>).</p></li>
 <li><p>“Number of newly established enterprises by province” dataset, sourced from GSO.</p></li>
-<li><p>“Index of Industrial production by province” dataset, sourced from GSO.</p></li>
 <li><p>Vietnam’s provincial geospatial boundaries dataset, sourced from <strong>Open Development Mekong</strong> (<a href="https://data.opendevelopmentmekong.net/dataset/a-phn-tnh">dataset link</a>).</p></li>
 </ul></li>
 <li><p><strong>Analytical Themes:</strong></p>
 <ul>
-<li><p><strong>Analytical Regionalisation and Geographical Segmentation:</strong> We will apply clustering techniques to segment Vietnam’s provinces into distinct economic regions based on the number of farms, industrial output, and newly established enterprises. This will allow us to classify regions with similar economic characteristics and highlight provincial-level economic disparities.</p></li>
-<li><p><strong>Geographically Weighted Regression (GWR):</strong> GWR will be used to assess how relationships between different economic indicators (e.g., farm numbers, industrial production) and overall economic performance vary across provinces. This method will account for spatial heterogeneity, enabling us to see how the impact of variables like agriculture or industry differs regionally.</p></li>
+<li><strong>Analytical Regionalisation and Geographical Segmentation:</strong> We will apply clustering techniques to segment Vietnam’s provinces into distinct economic regions based on the number of farms, industrial output, and newly established enterprises. This will allow us to classify regions with similar economic characteristics and highlight provincial-level economic disparities.</li>
 </ul></li>
 <li><p><strong>Data Processing:</strong></p>
 <ul>
 <li><p>We will harmonize all datasets by ensuring they are aligned with provincial boundaries and time periods.</p></li>
 <li><p>Standardizing and normalizing economic indicators to account for differences in provincial population sizes or geographic areas.</p></li>
-<li><p>Applying clustering algorithms (such as K-means) for regionalisation and performing GWR to model regional variation in economic outcomes.</p></li>
+<li><p>Applying clustering algorithms (such as K-means) for regionalisation to model regional variation in economic outcomes.</p></li>
 </ul></li>
 <li><p><strong>Geospatial Analysis:</strong></p>
 <ul>
-<li><p>Mapping and visualizing regions based on the segmentation to identify clusters of provinces with similar economic profiles.</p></li>
-<li><p>Using GWR to visualize spatially varying relationships between economic indicators and their impacts across Vietnam’s provinces.</p></li>
+<li>Mapping and visualizing regions based on the segmentation to identify clusters of provinces with similar economic profiles.</li>
 </ul></li>
 </ol>
 </section>
@@ -242,7 +238,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="expected-outcomes"><strong>Expected Outcomes:</strong></h3>
 <ol type="1">
 <li><p><strong>Regional Economic Segmentation:</strong> We will provide a clear classification of Vietnam’s provinces into distinct economic regions, based on their performance in agriculture, industrial output, and enterprise development. This will highlight regions that share similar economic profiles and identify which provinces are leading or lagging behind.</p></li>
-<li><p><strong>Insights into Spatial Economic Variation:</strong> Through the GWR analysis, we will offer detailed insights into how the relationships between economic activities (e.g., number of farms, industrial production) and overall economic performance differ across provinces. This will shed light on how agricultural or industrial strengths influence growth differently in various parts of the country.</p></li>
+<li><p><strong>Insights into Spatial Economic Variation:</strong> Through the Geographical Segmentation analysis, we will offer detailed insights into how the relationships between economic activities (e.g., number of farms) and overall economic performance differ across provinces. This will shed light on how agricultural or industrial strengths influence growth differently in various parts of the country.</p></li>
 <li><p><strong>Actionable Recommendations:</strong> Based on the segmentation and regression results, we can offer recommendations for policymakers and investors on regions that require further development or where specific economic sectors should be strengthened to promote balanced growth.</p></li>
 </ol>
 </section>
@@ -250,8 +246,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="challenges-and-limitations"><strong>Challenges and Limitations:</strong></h3>
 <ol type="1">
 <li><p><strong>Data Consistency and Quality:</strong> The datasets may not cover all provinces equally across all years, which could result in incomplete or biased analyses. Harmonizing data from multiple years and ensuring alignment across provinces could be challenging.</p></li>
-<li><p><strong>Spatial Scale Limitations:</strong> Since the analysis is at the provincial level, the insights derived from regional segmentation or GWR may not capture finer-scale intra-provincial disparities, particularly in large provinces with significant internal variation.</p></li>
-<li><p><strong>Model Sensitivity:</strong> Geographically Weighted Regression models can be sensitive to bandwidth selection and may produce unstable results in regions with sparse data. This could impact the reliability of the results in provinces with lower economic activity or incomplete data records.</p></li>
+<li><p><strong>Spatial Scale Limitations:</strong> Since the analysis is at the provincial level, the insights derived from regional segmentation may not capture finer-scale intra-provincial disparities, particularly in large provinces with significant internal variation.</p></li>
 </ol>
 </section>
 </section>

@@ -8,13 +8,13 @@ Welcome to our geospatial analytics project website. This project focuses on Vie
 
 ### **Motivation**
 
-Our project is motivated by Vietnam's remarkable economic growth within the ASEAN region, particularly its strong ties with countries like Singapore, which serve as major trading partners. Understanding the spatial dynamics of Vietnam’s economic development over the past decade is crucial for assessing regional disparities, planning future investments, and promoting balanced growth. Our analysis will provide valuable insights into how provinces differ in their agricultural, industrial, and enterprise performance, contributing to a deeper understanding of Vietnam's regional economic structure.
+Our project is motivated by Vietnam's remarkable farm economic growth within the ASEAN region, particularly its strong ties with countries like Singapore, which serve as major trading partners. Understanding the spatial dynamics of Vietnam’s farm economic development over the past decade is crucial for assessing regional disparities, planning future investments, and promoting balanced growth. Our analysis will provide valuable insights into how provinces differ in their agricultural and enterprise performance, contributing to a deeper understanding of Vietnam's regional economic structure.
 
 ### **Objectives**
 
--   To apply **Analytical Regionalisation** and **Geographically Weighted Regression Models** to explore economic development trends across Vietnam’s provinces.
+-   To apply **Analytical Regionalisation** and **Geographical Segmentation** to explore economic development trends across Vietnam’s provinces.
 
--   To build an interactive web application that facilitates data exploration and visualisation of provincial economic trends.
+-   To build an interactive web application that facilitates data exploration and visualisation of provincial farm economic trends.
 
 -   To provide actionable insights for policymakers, economists, and investors on regional economic growth and disparities in Vietnam.
 
@@ -42,9 +42,7 @@ Our approach involves leveraging open-source geospatial tools and datasets to an
 
 -   **Regional Economic Segmentation**: We will generate maps and analyses that classify Vietnam’s provinces into distinct economic regions based on their performance in agriculture, industry, and enterprise development.
 
--   **Spatial Insights via GWR**: Our models will reveal how economic variables influence development differently across provinces, providing insight into regional economic variation.
-
--   **Interactive Data Exploration**: Users can filter by year, region, and economic indicators, allowing for dynamic exploration of Vietnam's economic growth from 2012 to 2023.
+-   **Interactive Data Exploration**: Users can filter by year, region, and economic indicators, allowing for dynamic exploration of Vietnam's farm economic growth from 2012 to 2023.
 
 ### **Challenges and Future Work**
 

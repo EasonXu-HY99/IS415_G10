@@ -1,11 +1,11 @@
 ---
 title: "Uncovering Vietnam’s Economic Pulse: A Geospatial Exploration of Growth Hotspots (2012-2023)"
 author: 
-  - name: "Haiyang"
+  - name: "Xu Haiyang"
     affiliation: "Singapore Management University"
-  - name: "Ming Yan"
+  - name: "Han Ming Yan"
     affiliation: "Singapore Management University"
-  - name: "Javier"
+  - name: "Javier Lian"
     affiliation: "Singapore Management University"
 format:
   html:
@@ -16,19 +16,19 @@ format:
 editor: visual
 ---
 
-### **Mapping Vietnam’s Economic Pulse: A Geospatial Exploration of Growth Hotspots (2012-2023)**
+### **Mapping Vietnam’s Farm Economic Pulse: A Geospatial Exploration of Growth Hotspots (2012-2023)**
 
 By Group G10:
 
--   Haiyang, Singapore Management University
+-   Xu Haiyang, Singapore Management University
 
--   Ming Yan, Singapore Management University
+-   Han Ming Yan, Singapore Management University
 
--   Javier, Singapore Management University
+-   Javier Lian, Singapore Management University
 
-This project is part of Singapore Management University’s IS415 Geospatial Analytics & Applications 2023, under the guidance of Professor Kam Tin Seong.
+This project is part of Singapore Management University’s IS415 Geospatial Analytics & Applications 2024, under the guidance of Professor Kam Tin Seong.
 
-The aim of our project is to create an interactive web application that allows users to explore Vietnam’s economic development across provinces from 2012 to 2023. By using techniques such as **Analytical Regionalisation** and **Geographically Weighted Regression**, we provide valuable insights into the country’s economic growth patterns, regional disparities, and economic hotspots — all without the need for users to write a single line of code.
+The aim of our project is to create an interactive web application that allows users to explore Vietnam’s farm economic development across provinces from 2012 to 2023. By using techniques such as **Analytical Regionalisation** and **Geographical Segmentation**, we provide valuable insights into the country’s farm economic growth patterns, regional disparities, and economic hotspots — all without the need for users to write a single line
 
 ### **Important Links**
 

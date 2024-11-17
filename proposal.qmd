@@ -14,11 +14,11 @@ title: "IS415 Geospatial Analytics Project Proposal - Group 10"
 
 ## **Project Summary:**
 
-Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing three main datasets: "Number of farms by kinds of economic activity and by province," "Number of newly established enterprises by province," and "Index of Industrial production by province." By incorporating geospatial data, we aim to explore the economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.
+Our study focuses on analyzing the economic development of Vietnam at the provincial level, specifically utilizing two main datasets: "Number of farms by kinds of economic activity and by province" and "Number of newly established enterprises by province." By incorporating geospatial data, we aim to explore the farm economic activities and assess regional disparities in Vietnam’s growth from 2012 to 2023.
 
 ### **Motivation:**
 
-Vietnam’s rapid economic growth in recent years has positioned it as a key player in the ASEAN region. As a member of ASEAN, Vietnam shares strong economic ties with countries like Singapore, which is one of its largest trading partners. Understanding Vietnam’s economic development, particularly in terms of agriculture, industry, and enterprise growth at the provincial level, is crucial for assessing the country’s future trajectory within the regional economic landscape.
+Vietnam’s rapid economic growth in recent years has positioned it as a key player in the ASEAN region. As a member of ASEAN, Vietnam shares strong economic ties with countries like Singapore, which is one of its largest trading partners. Understanding Vietnam’s economic development, particularly in terms of agriculture and enterprise growth at the provincial level, is crucial for assessing the country’s future trajectory within the regional economic landscape.
 
 This analysis can offer valuable insights into how Vietnam’s internal economic dynamics may influence and interact with broader ASEAN trade and investment patterns. By identifying regional disparities and growth trends, we can contribute to better policymaking and investment decisions not only for Vietnam but also for ASEAN partners seeking opportunities in Vietnam’s developing markets. This type of analysis becomes especially important as Vietnam strives for greater integration into the global economy while balancing its role within ASEAN.
 
@@ -26,9 +26,7 @@ This analysis can offer valuable insights into how Vietnam’s internal economic
 
 1.  **Regional Economic Disparities:** Despite Vietnam’s overall economic growth, there are notable disparities between provinces, especially between more industrialized urban areas and agricultural rural regions. Understanding the spatial distribution of growth and inequality across the country will help identify regions that may be lagging behind and in need of policy attention.
 
-2.  **Balancing Agricultural and Industrial Development:** Vietnam’s economy has historically relied heavily on agriculture, but recent industrialization efforts have shifted the focus toward manufacturing and services. This shift may affect rural provinces that still depend on agriculture. Our analysis will explore how different provinces are transitioning between these sectors and how this shift might impact the future of both agriculture and industry.
-
-3.  **Inter-Regional Economic Dependencies within ASEAN:** Vietnam’s economic development is closely tied to its relationships with other ASEAN countries like Singapore. As trade and investment flows increase within ASEAN, understanding how Vietnam’s internal economic structure supports or hinders these relationships is crucial. Regional economic dependencies and potential bottlenecks must be addressed for sustained growth in both Vietnam and ASEAN.
+2.  **Inter-Regional Economic Dependencies within ASEAN:** Vietnam’s economic development is closely tied to its relationships with other ASEAN countries like Singapore. As trade and investment flows increase within ASEAN, understanding how Vietnam’s internal economic structure supports or hinders these relationships is crucial. Regional economic dependencies and potential bottlenecks must be addressed for sustained growth in both Vietnam and ASEAN.
 
 ### **Relevant Related Work:**
 
@@ -46,15 +44,11 @@ Geospatial analysis of economic activities across Vietnam has revealed a growing
 
     -   "Number of newly established enterprises by province" dataset, sourced from GSO.
 
-    -   "Index of Industrial production by province" dataset, sourced from GSO.
-
     -   Vietnam’s provincial geospatial boundaries dataset, sourced from **Open Development Mekong** ([dataset link](https://data.opendevelopmentmekong.net/dataset/a-phn-tnh)).
 
 2.  **Analytical Themes:**
 
     -   **Analytical Regionalisation and Geographical Segmentation:** We will apply clustering techniques to segment Vietnam’s provinces into distinct economic regions based on the number of farms, industrial output, and newly established enterprises. This will allow us to classify regions with similar economic characteristics and highlight provincial-level economic disparities.
-
-    -   **Geographically Weighted Regression (GWR):** GWR will be used to assess how relationships between different economic indicators (e.g., farm numbers, industrial production) and overall economic performance vary across provinces. This method will account for spatial heterogeneity, enabling us to see how the impact of variables like agriculture or industry differs regionally.
 
 3.  **Data Processing:**
 
@@ -62,19 +56,17 @@ Geospatial analysis of economic activities across Vietnam has revealed a growing
 
     -   Standardizing and normalizing economic indicators to account for differences in provincial population sizes or geographic areas.
 
-    -   Applying clustering algorithms (such as K-means) for regionalisation and performing GWR to model regional variation in economic outcomes.
+    -   Applying clustering algorithms (such as K-means) for regionalisation to model regional variation in economic outcomes.
 
 4.  **Geospatial Analysis:**
 
     -   Mapping and visualizing regions based on the segmentation to identify clusters of provinces with similar economic profiles.
 
-    -   Using GWR to visualize spatially varying relationships between economic indicators and their impacts across Vietnam’s provinces.
-
 ### **Expected Outcomes:**
 
 1.  **Regional Economic Segmentation:** We will provide a clear classification of Vietnam’s provinces into distinct economic regions, based on their performance in agriculture, industrial output, and enterprise development. This will highlight regions that share similar economic profiles and identify which provinces are leading or lagging behind.
 
-2.  **Insights into Spatial Economic Variation:** Through the GWR analysis, we will offer detailed insights into how the relationships between economic activities (e.g., number of farms, industrial production) and overall economic performance differ across provinces. This will shed light on how agricultural or industrial strengths influence growth differently in various parts of the country.
+2.  **Insights into Spatial Economic Variation:** Through the Geographical Segmentation analysis, we will offer detailed insights into how the relationships between economic activities (e.g., number of farms) and overall economic performance differ across provinces. This will shed light on how agricultural or industrial strengths influence growth differently in various parts of the country.
 
 3.  **Actionable Recommendations:** Based on the segmentation and regression results, we can offer recommendations for policymakers and investors on regions that require further development or where specific economic sectors should be strengthened to promote balanced growth.
 
@@ -82,9 +74,7 @@ Geospatial analysis of economic activities across Vietnam has revealed a growing
 
 1.  **Data Consistency and Quality:** The datasets may not cover all provinces equally across all years, which could result in incomplete or biased analyses. Harmonizing data from multiple years and ensuring alignment across provinces could be challenging.
 
-2.  **Spatial Scale Limitations:** Since the analysis is at the provincial level, the insights derived from regional segmentation or GWR may not capture finer-scale intra-provincial disparities, particularly in large provinces with significant internal variation.
-
-3.  **Model Sensitivity:** Geographically Weighted Regression models can be sensitive to bandwidth selection and may produce unstable results in regions with sparse data. This could impact the reliability of the results in provinces with lower economic activity or incomplete data records.
+2.  **Spatial Scale Limitations:** Since the analysis is at the provincial level, the insights derived from regional segmentation may not capture finer-scale intra-provincial disparities, particularly in large provinces with significant internal variation.
 
 ## Links
 
